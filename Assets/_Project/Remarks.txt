@@ -1,0 +1,2 @@
+assets are pointing to the wrong direction, we should talk with artists on that matter and pick the correct export settings.
+material import pipeline neds to be set up, unity has quite a lot to offer here
