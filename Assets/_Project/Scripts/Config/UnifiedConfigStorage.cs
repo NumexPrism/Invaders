@@ -1,17 +1,16 @@
 ﻿using Mechanics.GameField;
 using Mechanics.Player;
+using Mechanics.Projectiles;
 using UnityEngine;
 
-namespace DependencyInjection
+namespace Config
 {
   [CreateAssetMenu(menuName = "Configurations/Config Storage", fileName = "Configuration", order = 0)]
-  public class UnifiedConfigStorage : ScriptableObject, IPlayerShipConfig, IGameFieldConfig
+  public class UnifiedConfigStorage : ScriptableObject 
   {
     public PlayerShipConfig PlayerShip;
     public GameFieldConfig Field;
-
-    public float Speed => PlayerShip.speed;
-    public float ShootDelay => PlayerShip.shootDelay;
-    public float Width => Field.Width;
+    public ProjectileConfig PlayerProjectileConfig;
+    public ProjectileConfig EnemyProjectileConfig;
   }
 }

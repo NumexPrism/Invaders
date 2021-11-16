@@ -16,5 +16,9 @@ MonoBehaviour:
     speed: 10
     shootDelay: 0.1
   Field:
-    Width: 10
-    Height: 10
+    width: 10
+    height: 10
+  PlayerProjectileConfig:
+    speed: 20
+  EnemyProjectileConfig:
+    speed: 2

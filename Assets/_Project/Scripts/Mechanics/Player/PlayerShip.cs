@@ -13,8 +13,9 @@ namespace Mechanics.Player
   {
     [Inject] private IGameInput _input;
     [Inject] private IPlayerShipConfig _config;
-    [Inject] private IProjectileFactory _projectiles;
+    [Inject] private Projectile.Factory _projectileFactory;
     [Inject] private IGameField _gameField;
+    [Inject(Id = Party.Player)] private IProjectileConfig _projectileConfig;
 
     private float _speed;
     private Task _shootTimeoutTask;
@@ -47,8 +48,12 @@ namespace Mechanics.Player
     {
       if (IsAllowedToShoot)
       {
-        _projectiles.Spawn(transform.position);
         _shootTimeoutTask = WaitForTimeout();
+
+        var parameters = new ProjectileLaunchParameters(transform.position, Party.Player, _projectileConfig);
+
+
+        _projectileFactory.Create(parameters);
       }
     }
 

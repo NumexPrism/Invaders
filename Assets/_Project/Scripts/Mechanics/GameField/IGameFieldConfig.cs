@@ -1,9 +1,8 @@
-﻿using System;
-
-namespace Mechanics.GameField
+﻿namespace Mechanics.GameField
 {
   interface IGameFieldConfig
   {
+    float Height{ get; }
     float Width { get; }
   }
 }

@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,7 @@ namespace Input
 {
   public class PlayerActionsAdapter : MonoBehaviour, IGameInput
   {
+    [UsedImplicitly]//called via unity events
     public void OnMove(InputAction.CallbackContext context)
     {
       var dir = context.action.ReadValue<float>();
@@ -20,6 +22,7 @@ namespace Input
       }
     }
 
+    [UsedImplicitly]//called via unity events
     public void OnFire(InputAction.CallbackContext context)
     {
       if (context.performed)
