@@ -52,7 +52,6 @@ namespace Mechanics.Player
 
         var parameters = new ProjectileLaunchParameters(transform.position, Party.Player, _projectileConfig);
 
-
         _projectileFactory.Create(parameters);
       }
     }

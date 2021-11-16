@@ -13,7 +13,7 @@ namespace DependencyInjection
     public PlayerActionsAdapter ActionAdapter;
     public PlayerShip Ship;
     public Projectile ProjectilePrefab;
-    
+    public GameState GameState;
 
     public override void InstallBindings()
     {
@@ -40,6 +40,14 @@ namespace DependencyInjection
         .FromMonoPoolableMemoryPool(x => x.WithInitialSize(2)
           .FromComponentInNewPrefab(ProjectilePrefab)
           .UnderTransformGroup("Projectiles"));
+
+      Container.BindInstance(GameState);
+      Container.Bind<WaitingState>().AsSingle();
+      Container.Bind<PlayingState>().AsSingle();
+
+     //Container.BindFactory<WaitingState, WaitingState.Factory>();
+     //Container.BindFactory<PlayingState, PlayingState.Factory>();
+     //Container.BindFactory<WaitingState, WaitingState.Factory>();
     }
   }
 }
