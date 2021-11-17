@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Mechanics.GameField;
+using UnityEngine;
 using Zenject;
 
-namespace Mechanics.GameField
+namespace Mechanics.Field
 {
   class GameField : IGameField
   {
@@ -14,17 +15,17 @@ namespace Mechanics.GameField
 
     public float ClampPlayerPosition(float position)
     {
-      return Mathf.Clamp(position, LeftBorder, RightBorder);
+      return Mathf.Clamp(position, _config.Left(), _config.Right());
     }
-
-    private float RightBorder => _config.Width / 2;
-    private float LeftBorder => -_config.Width / 2;
-    public float TopBorder => _config.Height;
-    public float BottomBorder => 0.0f;
 
     public bool IsOutsideBounds(Vector3 position)
     {
-      return position.z < BottomBorder || position.z > TopBorder || position.x < LeftBorder || position.x > RightBorder;
+      return position.z < _config.Bottom() || position.z > _config.Top() || position.x < -_config.Left() || position.x > _config.Right();
+    }
+
+    public Vector3 GetGridPosition(int x, int y)
+    {
+      return _config.Cell(x, y);
     }
   }
 }

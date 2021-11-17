@@ -1,5 +1,8 @@
 ﻿using Config;
 using Input;
+using Mechanics;
+using Mechanics.Enemy;
+using Mechanics.Field;
 using Mechanics.GameField;
 using Mechanics.Player;
 using Mechanics.Projectiles;
@@ -7,12 +10,13 @@ using Zenject;
 
 namespace DependencyInjection
 {
-  class SceneObjectsInstaller:MonoInstaller<SceneObjectsInstaller>
+  class GameSceneInstaller:MonoInstaller<GameSceneInstaller>
   {
     public UnifiedConfigStorage ConfigStorage;
     public PlayerActionsAdapter ActionAdapter;
     public PlayerShip Ship;
     public Projectile ProjectilePrefab;
+    public SimpleEnemy EnemyPrefab;
     public GameState GameState;
 
     public override void InstallBindings()
@@ -41,9 +45,10 @@ namespace DependencyInjection
           .FromComponentInNewPrefab(ProjectilePrefab)
           .UnderTransformGroup("Projectiles"));
 
-      Container.BindInstance(GameState);
-      Container.Bind<WaitingState>().AsSingle();
-      Container.Bind<PlayingState>().AsSingle();
+      Container.BindFactory<EnemySpawnParameters, SimpleEnemy, SimpleEnemy.Factory>()
+        .FromMonoPoolableMemoryPool(x => x.WithInitialSize(32)
+          .FromComponentInNewPrefab(EnemyPrefab)
+          .UnderTransformGroup("Enemies"));
     }
   }
 }

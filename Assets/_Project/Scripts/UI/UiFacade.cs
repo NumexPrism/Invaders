@@ -7,7 +7,7 @@ using Zenject;
 
 namespace UI
 {
-  class UiFacade : MonoBehaviour, IUiFacade
+  class UiFacade : MonoBehaviour, IUiFacade, IUiDebug
   {
     private FSM fsm;
 
@@ -101,9 +101,16 @@ namespace UI
       return fsm.ProcessSignal(UiFsmSignalId.LeaderBoard);
     }
 
-    public bool ShowGameOverView()
+    public bool ShowGameEndView()
     {
       return fsm.ProcessSignal(UiFsmSignalId.GameOver);
     }
+
+#if UNITY_EDITOR
+    public void ForceSwitchToGameUi()
+    {
+      fsm.ForceChangeState(UiFsmStateId.Game);
+    }
+#endif
   }
 }

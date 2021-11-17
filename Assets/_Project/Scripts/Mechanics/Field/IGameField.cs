@@ -7,5 +7,6 @@ namespace Mechanics.GameField
   {
     float ClampPlayerPosition(float position);
     bool IsOutsideBounds(Vector3 position);
+    Vector3 GetGridPosition(int x, int y);
   }
 }

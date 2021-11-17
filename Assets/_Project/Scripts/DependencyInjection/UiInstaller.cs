@@ -16,8 +16,6 @@ namespace DependencyInjection
     public GameEndView gameEnd; 
     public LeaderBoardView leaderBoard; 
 
-    public UiFacade uiFacade; 
-
     public override void InstallBindings()
     {
       Container.BindInstance(loadingUiView)
@@ -29,7 +27,6 @@ namespace DependencyInjection
       InstallUiViewFromPrefab<GameEndView>(gameEnd);
       InstallUiViewFromPrefab<LeaderBoardView>(leaderBoard);
 
-      Container.BindInstance(uiFacade);
     }
 
     void InstallUiViewFromPrefab<TUiView>(Object uiViewPrefab) where TUiView: IUiView 
