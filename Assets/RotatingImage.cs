@@ -13,4 +13,5 @@ public class RotatingImage : MonoBehaviour
     rotation.z += RPM * Time.unscaledDeltaTime * RpmToDegPerSecond * (Clockwise?-1:1);
     transform.rotation = Quaternion.Euler(rotation);
   }
+
 }

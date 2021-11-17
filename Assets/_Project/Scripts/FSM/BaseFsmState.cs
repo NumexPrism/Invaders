@@ -1,11 +1,16 @@
 public abstract class BaseFsmState : IFsmState, IFsmStateConfigurator
 {
-  public void LinkFsmState(FSM fsm)
+  public string Id { get; private set; }
+  public void SetId(string id)
   {
-    FSM = fsm;
+    Id = id;
   }
 
-  public FSM FSM { get; private set; }
+  public FSM Fsm { get; private set; }
+  public void LinkFsmState(FSM fsm)
+  {
+    this.Fsm = fsm;
+  }
 
   public virtual void OnEnter()
   {

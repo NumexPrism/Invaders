@@ -1,0 +1,6 @@
+﻿namespace DependencyInjection
+{
+  class ProjectContextInstaller
+  {
+  }
+}

@@ -12,7 +12,7 @@ public class FSM
   private Dictionary<string, Dictionary<string, string>> _transitions =
     new Dictionary<string, Dictionary<string, string>>();
 
-  private string _currentStateId;
+  public string CurrentStateId { get; private set; }
 
   public static IFsmBuilder Build()
   {
@@ -32,6 +32,7 @@ public class FSM
     {
       _sm._states[id] = state;
       state.LinkFsmState(_sm); 
+      state.SetId(id);
       return this;
     }
 
@@ -52,45 +53,46 @@ public class FSM
 
     public FSM SetEntryState(string entry)
     {
-      _sm._currentStateId = entry;
+      _sm.CurrentStateId = entry;
       return _sm;
     }
   }
 
   public void Start()
   {
-    var state = _states[_currentStateId];
+    var state = _states[CurrentStateId];
     state.OnEnter();
   }
 
   private readonly Queue<string> signals = new Queue<string>(1);
 
-  public void SendSignal(string signal)
+  public bool ProcessSignal(string signal)
   {
     if (signals.Count != 0)
     {
       Debug.LogError("recursive state change is not supported");
-      return;
+      return false;
     }
 
     signals.Enqueue(signal);
 
-    if (!_transitions.ContainsKey(_currentStateId))
+    if (!_transitions.ContainsKey(CurrentStateId))
     {
-      Debug.Log($"State {_currentStateId} has no rule for signal {signal}. Nothing happens");
+      Debug.Log($"State {CurrentStateId} has no rule for signal {signal}. Nothing happens");
       signals.Dequeue();
-      return;
+      return false;
     }
 
     try
     {
-      var nextStateId = _transitions[_currentStateId][signal];
+      var previousStateId = CurrentStateId;
+      var nextStateId = _transitions[CurrentStateId][signal];
 
-      StateChanging?.Invoke(_currentStateId, nextStateId);
+      StateChanging?.Invoke(CurrentStateId, nextStateId);
 
       try
       {
-        var state = _states[_currentStateId];
+        var state = _states[CurrentStateId];
         state.OnExit();
       }
       catch (Exception e)
@@ -98,16 +100,17 @@ public class FSM
         Debug.LogException(e);
       }
 
-      _currentStateId = nextStateId;
+      CurrentStateId = nextStateId;
       var nextState = _states[nextStateId];
       nextState.OnEnter();
 
-      StateChanged?.Invoke(_currentStateId, nextStateId);
+      StateChanged?.Invoke(previousStateId, nextStateId);
     }
     finally
     {
       signals.Dequeue();
     }
+    return true;
   }
 
   /// <summary>

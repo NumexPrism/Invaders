@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6916880615140919914}
   - component: {fileID: 2522085338984498987}
   m_Layer: 5
-  m_Name: High Scores (1)
+  m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -638,6 +638,9 @@ GameObject:
   - component: {fileID: 7389899557532195737}
   - component: {fileID: 7389899557532195734}
   - component: {fileID: 6584190039716575497}
+  - component: {fileID: 4842818636522148779}
+  - component: {fileID: 5848416448953807603}
+  - component: {fileID: 8490250321620438041}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -716,6 +719,51 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &4842818636522148779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7389899557532195732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 715e472364ab4801b0524d1f4eecc451, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5848416448953807603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7389899557532195732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scriptableObjectInstallers: []
+  _monoInstallers:
+  - {fileID: 8490250321620438041}
+  _installerPrefabs: []
+  _autoRun: 1
+  _kernel: {fileID: 0}
+--- !u!114 &8490250321620438041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7389899557532195732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08c066e8c9543b49de8054351613d74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartButton: {fileID: 4559403760205225075}
+  HighScoreButton: {fileID: 7128035796390529683}
+  ExitButton: {fileID: 2522085338984498987}
 --- !u!1 &7608497481235595320
 GameObject:
   m_ObjectHideFlags: 0

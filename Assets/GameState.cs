@@ -50,7 +50,7 @@ public class WaitingState : BaseFsmState
 
   private void SwitchToPlaying()
   {
-    FSM.SendSignal(GameFSMSignal.Start);
+    Fsm.ProcessSignal(GameFSMSignal.Start);
   }
 
   public override void OnExit()

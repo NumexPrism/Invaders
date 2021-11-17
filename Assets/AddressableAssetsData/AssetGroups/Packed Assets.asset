@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Packed Assets
+  m_EditorClassIdentifier: 
+  m_GroupName: Packed Assets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 14eff1a537aafa948977ed46e940d921
+  m_SerializeEntries:
+  - m_GUID: fc85572e808b8ea46a7c70cf42cd5910
+    m_Address: Assets/_Project/Prefabs/UI/Projectile.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 41b236ff98a955840a67c3fcecc138bb
+    m_Address: Assets/_Project/Prefabs/UI/Loading.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 99c08d1585393174bb53983f88d09437
+    m_Address: Assets/_Project/Prefabs/UI/MainMenu.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ae8f467421bd1744d8df740222f05f55
+    m_Address: Assets/_Project/Prefabs/UI/Game UI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9131a1638e5cfd449aa29c951373e14e
+    m_Address: Assets/_Project/Prefabs/UI/Results.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 736cbcd7e45926d47b3a6a19a87a4ae3
+    m_Address: Assets/_Project/Prefabs/UI/HighScore.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: d8bfc74861f13ab49966651fcef45554, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 7fb0cb4b2d79ce941b2610d4300c99fc, type: 2}
+    - {fileID: 11400000, guid: 4ce23f80503fd0348bf417267cc61dae, type: 2}

@@ -44,10 +44,6 @@ namespace DependencyInjection
       Container.BindInstance(GameState);
       Container.Bind<WaitingState>().AsSingle();
       Container.Bind<PlayingState>().AsSingle();
-
-     //Container.BindFactory<WaitingState, WaitingState.Factory>();
-     //Container.BindFactory<PlayingState, PlayingState.Factory>();
-     //Container.BindFactory<WaitingState, WaitingState.Factory>();
     }
   }
 }

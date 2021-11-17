@@ -1,6 +1,8 @@
 public interface IFsmState
 {
-  FSM FSM { get; }
+  string Id { get; }
+  FSM Fsm { get; }
+
   void OnEnter();
   void OnExit();
 }
