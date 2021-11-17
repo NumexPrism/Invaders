@@ -1,15 +1,8 @@
-﻿using UnityEngine.UI;
-
-namespace DependencyInjection
+﻿namespace DependencyInjection.UI
 {
   class LoadingViewMonoInstaller : UiViewMonoInstaller<LoadingViewMonoInstaller>
   {
-
-
-    public override void InstallBindings()
-    {
-      base.InstallBindings();
-
-    }
+    //YAGNI principle broken here.
+    //in real world production, this UI would have a messaging system to tell if error happened, retry button and some other things.
   }
 }

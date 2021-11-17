@@ -1,15 +1,21 @@
-﻿using System;
-using DependencyInjection.UI;
-using UI.Views.MainMenu;
+﻿using DependencyInjection.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI
+namespace UI.Views.MainMenu
 {
   [RequireComponent(typeof(MainMenuViewMonoInstaller))]
   internal class MainMenuView: BaseUIView
   {
+    // This place here, is where DI shows it's worst. 
+    // I had to create another installer script and add the references there, also introduced an entity which is ButtonId
+    // and I also had to add an context script to the same GO so the installer would work.
+    //
+    // I could have just added references to this monobehaviour and drag'n'drop them in editor. It would be much cleaner, and way faster.
+    // and I can't even test these buttons because they are 3rd party, and don't provide a way to mock the clicks
+    // so, the DI is just a 100% boilerplate here.
+
     [Inject(Id = ButtonId.Start)] private Button _startButton;
     [Inject(Id = ButtonId.HighScore)] private Button _leaderBoardButton;
     [Inject(Id = ButtonId.Exit)] private Button _exitButton;

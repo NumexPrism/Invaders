@@ -623,7 +623,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Back
+  m_text: OK
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e4c1866223c26284c9189c55624bd633, type: 2}
   m_sharedMaterial: {fileID: 8674378647551017700, guid: e4c1866223c26284c9189c55624bd633, type: 2}
@@ -932,6 +932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fe226d2b9a04228a6d007189cea220e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nextButton: {fileID: 9146767415343590088}
 --- !u!225 &5849460277213413176
 CanvasGroup:
   m_ObjectHideFlags: 0

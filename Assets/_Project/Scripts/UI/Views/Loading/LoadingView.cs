@@ -1,4 +1,5 @@
 ﻿using DependencyInjection;
+using DependencyInjection.UI;
 using UnityEngine;
 
 namespace UI

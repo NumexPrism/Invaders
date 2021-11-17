@@ -289,7 +289,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: High Score
+  m_text: Leaderboard
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e4c1866223c26284c9189c55624bd633, type: 2}
   m_sharedMaterial: {fileID: 8674378647551017700, guid: e4c1866223c26284c9189c55624bd633, type: 2}
@@ -761,9 +761,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a08c066e8c9543b49de8054351613d74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartButton: {fileID: 4559403760205225075}
-  HighScoreButton: {fileID: 7128035796390529683}
-  ExitButton: {fileID: 2522085338984498987}
+  startButton: {fileID: 4559403760205225075}
+  leaderBoardButton: {fileID: 7128035796390529683}
+  exitButton: {fileID: 2522085338984498987}
 --- !u!1 &7608497481235595320
 GameObject:
   m_ObjectHideFlags: 0
@@ -776,7 +776,7 @@ GameObject:
   - component: {fileID: 5868054553200512979}
   - component: {fileID: 7128035796390529683}
   m_Layer: 5
-  m_Name: High Scores
+  m_Name: Leaderboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

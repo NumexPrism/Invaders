@@ -1,4 +1,6 @@
 ﻿using UI;
+using UI.Views.Leaderboard;
+using UI.Views.MainMenu;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Zenject;

@@ -1,8 +1,7 @@
-﻿using UI;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
-namespace DependencyInjection
+namespace DependencyInjection.UI
 {
   abstract class UiViewMonoInstaller<TDerived> : MonoInstaller<TDerived> where TDerived : MonoInstaller<TDerived>
   {
