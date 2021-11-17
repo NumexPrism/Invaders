@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UI.Views.Game;
 using UI.Views.Leaderboard;
 using UI.Views.MainMenu;
 using UnityEngine;

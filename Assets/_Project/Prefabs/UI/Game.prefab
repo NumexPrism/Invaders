@@ -599,7 +599,6 @@ GameObject:
   - component: {fileID: 1123101197306020848}
   - component: {fileID: 1029891981569498694}
   - component: {fileID: 6240225586743870368}
-  - component: {fileID: 253902869599223314}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -679,19 +678,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &253902869599223314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4387427796610502142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ControlPath: <Keyboard>/space
 --- !u!1 &4985466360533817311
 GameObject:
   m_ObjectHideFlags: 0
@@ -2033,6 +2019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e398c83c8044920844f57c1416ac9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _waveText: {fileID: 4638024870974666314}
 --- !u!225 &7576198656141798177
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2076,6 +2063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backButton: {fileID: 6240225586743870368}
+  waveText: {fileID: 4638024870974666314}
 --- !u!1 &9199860911144653856
 GameObject:
   m_ObjectHideFlags: 0

@@ -117,15 +117,14 @@ public class FSM
 #if UNITY_EDITOR
   public void ForceChangeState(string id)
   {
-
     //one cool way to approach it would be to find the shortest path in the state graph
     //and traverse the way, so it would be valid from the SM perspective.
 
     //Since it's a test task, i'will just hop to the requested state, and mark the method as editor only
 
     var previousStateId = CurrentStateId;
-
     StateChanging?.Invoke(CurrentStateId, id);
+    CurrentStateId = id;
     StateChanged?.Invoke(previousStateId, id);
   }
 #endif

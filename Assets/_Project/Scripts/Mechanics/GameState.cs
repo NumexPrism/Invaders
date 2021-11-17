@@ -1,4 +1,5 @@
 ﻿using Mechanics.Enemy;
+using Mechanics.Field;
 using Mechanics.GameField;
 using UI;
 using UnityEngine;
@@ -10,10 +11,8 @@ namespace Mechanics
   {
 #if UNITY_EDITOR
     [Inject] private IUiDebug _uiDebug;
+    [Inject] private EnemyWave _wave;
 #endif
-
-    [Inject] private SimpleEnemy.Factory _enemyFactory;
-    [Inject] private IGameField _field;
 
     void JumpToGameUiInEditor()
     {
@@ -29,6 +28,7 @@ namespace Mechanics
     private void Start()
     {
       JumpToGameUiInEditor();
+      _wave.WaveCleared += SpawnWave;
       SpawnWave();
     }
 
@@ -39,19 +39,7 @@ namespace Mechanics
 
     private void SpawnWave()
     {
-      int w = 8;
-      int h = 8;
-      for (int i = 0; i < w; i++)
-      {
-        for (int j = 0; j < h; j+=2)
-        {
-          var spawnParameters = new EnemySpawnParameters
-          {
-            position = _field.GetGridPosition(i, j)
-          };
-          _enemyFactory.Create(spawnParameters);
-        }
-      }
+      _wave.Spawn();
     }
 
     public void Pause()

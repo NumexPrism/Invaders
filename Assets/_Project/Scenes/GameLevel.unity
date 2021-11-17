@@ -423,8 +423,6 @@ MonoBehaviour:
   ConfigStorage: {fileID: 11400000, guid: 36a69c4223da8dd458faf5580bb127e1, type: 2}
   ActionAdapter: {fileID: 1099252418}
   Ship: {fileID: 1786037436}
-  ProjectilePrefab: {fileID: 3879698918097754407, guid: fc85572e808b8ea46a7c70cf42cd5910, type: 3}
-  EnemyPrefab: {fileID: 5891472387886744540, guid: 40d1b91cd78e9624aab67ddee905205d, type: 3}
   GameState: {fileID: 465119354}
 --- !u!114 &672675555
 MonoBehaviour:
@@ -714,3 +712,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cbf998a62d64b359216d62f1aeb9c1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &1786037437
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786037435}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 0.6936716, z: 1.9165945}
+  m_Center: {x: 0, y: -0.120748475, z: -0.3295901}

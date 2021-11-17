@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Input;
+using Mechanics.Field;
 using Mechanics.GameField;
 using Mechanics.Projectiles;
 using UnityEngine;
@@ -9,16 +10,24 @@ using Zenject;
 
 namespace Mechanics.Player
 {
-  public class PlayerShip : MonoBehaviour, IPlayerShip
+  [RequireComponent(typeof(Collider))]
+  public class PlayerShip : MonoBehaviour, IPlayerShip, IHitByProjectile
   {
     [Inject] private IGameInput _input;
     [Inject] private IPlayerShipConfig _config;
     [Inject] private Projectile.Factory _projectileFactory;
-    [Inject] private IGameField _gameField;
+    [Inject] private IGameFieldConfig _gameField;
     [Inject(Id = Party.Player)] private IProjectileConfig _projectileConfig;
 
     private float _speed;
     private Task _shootTimeoutTask;
+
+    public Party Party => Party.Player;
+
+    public void ReceiveDamage()
+    {
+      Debug.Log("Lives reduced");
+    }
 
     public bool IsAllowedToShoot => _shootTimeoutTask == null || _shootTimeoutTask.IsCompleted;
 

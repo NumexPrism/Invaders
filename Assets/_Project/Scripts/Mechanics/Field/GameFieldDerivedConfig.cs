@@ -80,5 +80,20 @@ namespace Mechanics.Field
     {
       return cfg.Height / (cfg.Rows-1);
     }
+
+    public static float ClampPlayerPosition(this IGameFieldConfig cfg, float position)
+    {
+      return Mathf.Clamp(position, cfg.Left(), cfg.Right());
+    }
+
+    public static  bool IsOutsideBounds(this IGameFieldConfig cfg, Vector3 position)
+    {
+      return position.z < cfg.Bottom() || position.z > cfg.Top() || position.x < cfg.Left() || position.x > cfg.Right();
+    }
+
+    public static Vector3 GetGridPosition(this IGameFieldConfig cfg, int x, int y)
+    {
+      return cfg.Cell(x, y);
+    }
   }
 }

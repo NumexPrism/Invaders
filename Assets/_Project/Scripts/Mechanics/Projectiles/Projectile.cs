@@ -1,5 +1,5 @@
 ﻿using System;
-using Mechanics.GameField;
+using Mechanics.Field;
 using UnityEngine;
 using Zenject;
 
@@ -11,7 +11,7 @@ namespace Mechanics.Projectiles
     private Party party;
     IMemoryPool _pool;
 
-    [Inject] private IGameField _gameField;
+    [Inject] private IGameFieldConfig _gameField;
 
     internal class Pool: MonoMemoryPool<ProjectileLaunchParameters, Projectile> {}
     public class Factory:PlaceholderFactory<ProjectileLaunchParameters, Projectile>{}
@@ -46,6 +46,18 @@ namespace Mechanics.Projectiles
     public void Dispose()
     {
       _pool.Despawn(this);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+      Debug.Log("HIT SMTHING");
+      var canBeHit = other.GetComponent<IHitByProjectile>();
+      if (canBeHit == null || canBeHit.Party == Party.None || canBeHit.Party == party)
+      {
+        return;
+      }
+      canBeHit.ReceiveDamage();
+      Dispose();
     }
   }
 } 

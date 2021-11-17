@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: ProjectContextInstaller
   m_EditorClassIdentifier: 
   uiPrefab: {fileID: 168379642985348850, guid: a4786fd13e9ca40499b1b8a52df25674, type: 3}
+  ProjectilePrefab: {fileID: 3879698918097754407, guid: fc85572e808b8ea46a7c70cf42cd5910, type: 3}
+  EnemyPrefab: {fileID: 5891472387886744540, guid: 40d1b91cd78e9624aab67ddee905205d, type: 3}
+  ConfigStorage: {fileID: 11400000, guid: 36a69c4223da8dd458faf5580bb127e1, type: 2}
