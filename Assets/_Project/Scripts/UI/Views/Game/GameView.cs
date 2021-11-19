@@ -1,6 +1,7 @@
-﻿using DependencyInjection.UI;
+﻿using Installers.UI.UiPanel;
 using Mechanics;
 using Mechanics.Enemy;
+using Mechanics.GameRules;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,14 +17,25 @@ namespace UI.Views.Game
     [Inject(Id = UiLabelId.Wave)] private TextMeshProUGUI _waveText;
     [Inject(Id = UiLabelId.Lives)] private TextMeshProUGUI _livesText;
     [Inject(Id = UiLabelId.Score)] private TextMeshProUGUI _scoreText;
-    [Inject] private GameController _enemyWave;
+
+    [Inject] private DiContainer container;
+
+    private IGameSession _subscribedGameSession;
 
     private void OnEnable()
     {
+      //GameController is injected dynamically when GameScene opens
+      //when
+      SubscribeToGameSession(container.Resolve<IGameSession>());
+    }
+
+    private void SubscribeToGameSession(IGameSession gameSession)
+    {
+      this._subscribedGameSession = gameSession;
       _backButton.onClick.AddListener(BackButtonClicked);
-      _enemyWave.WaveCount.Observe(ShowWave);
-      _enemyWave.PlayerLives.Observe(ShowLives);
-      _enemyWave.PlayerScore.Observe(ShowScore);
+      _subscribedGameSession.WaveCount.Observe(ShowWave);
+      _subscribedGameSession.PlayerLives.Observe(ShowLives);
+      _subscribedGameSession.PlayerScore.Observe(ShowScore);
     }
 
     private void ShowWave(int number)
@@ -45,9 +57,9 @@ namespace UI.Views.Game
     private void OnDisable()
     {
       _backButton.onClick.RemoveListener(BackButtonClicked);
-      _enemyWave.WaveCount.StopObserving(ShowWave);
-      _enemyWave.PlayerLives.StopObserving(ShowLives);
-      _enemyWave.PlayerScore.StopObserving(ShowScore);
+      _subscribedGameSession.WaveCount.StopObserving(ShowWave);
+      _subscribedGameSession.PlayerLives.StopObserving(ShowLives);
+      _subscribedGameSession.PlayerScore.StopObserving(ShowScore);
     }
 
     private void BackButtonClicked()

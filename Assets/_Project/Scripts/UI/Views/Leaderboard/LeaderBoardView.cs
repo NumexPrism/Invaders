@@ -1,4 +1,4 @@
-﻿using DependencyInjection.UI;
+﻿using Installers.UI.UiPanel;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

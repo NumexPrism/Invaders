@@ -1,22 +1,25 @@
-public abstract class BaseFsmState : IFsmState, IFsmStateConfigurator
+namespace FSM
 {
-  public string Id { get; private set; }
-  public void SetId(string id)
+  public abstract class BaseFsmState : IFsmState, IFsmStateConfigurator
   {
-    Id = id;
-  }
+    public string Id { get; private set; }
+    public void SetId(string id)
+    {
+      Id = id;
+    }
 
-  public FSM Fsm { get; private set; }
-  public void LinkFsmState(FSM fsm)
-  {
-    this.Fsm = fsm;
-  }
+    public FSM Fsm { get; private set; }
+    public void LinkFsmState(FSM fsm)
+    {
+      this.Fsm = fsm;
+    }
 
-  public virtual void OnEnter()
-  {
-  }
+    public virtual void OnEnter()
+    {
+    }
 
-  public virtual void OnExit()
-  {
+    public virtual void OnExit()
+    {
+    }
   }
 }

@@ -1,4 +1,5 @@
-﻿using DependencyInjection.UI;
+﻿using AssetManagement;
+using Installers.UI.UiPanel;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -20,6 +21,8 @@ namespace UI.Views.MainMenu
     [Inject(Id = ButtonId.HighScore)] private Button _leaderBoardButton;
     [Inject(Id = ButtonId.Exit)] private Button _exitButton;
 
+    [Inject] private InvadersSceneManager _scenes;
+
     private void OnEnable()
     {
       _startButton.onClick.AddListener(StartButtonClicked);
@@ -34,8 +37,9 @@ namespace UI.Views.MainMenu
       _exitButton.onClick.RemoveListener(ExitButtonClicked);
     }
 
-    private void StartButtonClicked()
+    private async void StartButtonClicked()
     {
+      await _scenes.LoadGameScene();
       UiFacade.ShowNextView();
     }
 

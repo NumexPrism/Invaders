@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UI.Views.Game;
+using UI.Views.GameEnd;
 using UI.Views.Leaderboard;
+using UI.Views.Loading;
 using UI.Views.MainMenu;
 using UnityEngine;
 using Zenject;
@@ -10,7 +12,7 @@ namespace UI
 {
   class UiFacade : MonoBehaviour, IUiFacade, IUiDebug
   {
-    private FSM fsm;
+    private FSM.FSM fsm;
 
     [Inject] private LoadingView _loadingView;
     [Inject] private MainMenuView _mainMenu;
@@ -32,7 +34,7 @@ namespace UI
 
     public void Start()
     {
-      fsm = FSM.Build()
+      fsm = FSM.FSM.Build()
         .AddState(UiFsmStateId.Loading,     new UiState())
         .AddState(UiFsmStateId.MainMenu,    new UiState())
         .AddState(UiFsmStateId.Game,        new UiState())
@@ -44,7 +46,7 @@ namespace UI
         .AddTransition(UiFsmStateId.MainMenu,    UiFsmSignalId.LeaderBoard, UiFsmStateId.Leaderboard)
         .AddTransition(UiFsmStateId.Leaderboard, UiFsmSignalId.Back,        UiFsmStateId.MainMenu)
         .AddTransition(UiFsmStateId.Game,        UiFsmSignalId.Back,        UiFsmStateId.MainMenu)
-        .AddTransition(UiFsmStateId.Game,        UiFsmSignalId.GameOver,    UiFsmStateId.GameOver)
+        .AddTransition(UiFsmStateId.Game,        UiFsmSignalId.Next,        UiFsmStateId.GameOver)
         .AddTransition(UiFsmStateId.GameOver,    UiFsmSignalId.Next,        UiFsmStateId.MainMenu)
 
         .SetEntryState(UiFsmStateId.Loading);
@@ -100,11 +102,6 @@ namespace UI
     public bool ShowLeaderBoard()
     {
       return fsm.ProcessSignal(UiFsmSignalId.LeaderBoard);
-    }
-
-    public bool ShowGameEndView()
-    {
-      return fsm.ProcessSignal(UiFsmSignalId.GameOver);
     }
 
 #if UNITY_EDITOR

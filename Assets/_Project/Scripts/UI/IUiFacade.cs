@@ -5,6 +5,5 @@
     bool ShowNextView();
     bool ShowPreviousView();
     bool ShowLeaderBoard();
-    bool ShowGameEndView();
   }
 }

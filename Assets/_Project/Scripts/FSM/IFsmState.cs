@@ -1,8 +1,11 @@
-public interface IFsmState
+namespace FSM
 {
-  string Id { get; }
-  FSM Fsm { get; }
+  public interface IFsmState
+  {
+    string Id { get; }
+    FSM Fsm { get; }
 
-  void OnEnter();
-  void OnExit();
+    void OnEnter();
+    void OnExit();
+  }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Zenject;
 
-namespace UI
+namespace UI.Views
 {
   [RequireComponent(typeof(CanvasGroup))]
   [RequireComponent(typeof(GameObjectContext))]
@@ -10,18 +10,16 @@ namespace UI
     [Inject] protected CanvasGroup CanvasGroup;
     [Inject] protected IUiFacade UiFacade;
 
-    protected virtual void Start()
-    {
-    }
-
     public virtual void Hide()
     {
       //ToDo:disappearAnimation
+      Debug.Log($"{this.GetType()} HIDEDN (GO ={gameObject.name})");
       gameObject.SetActive(false);
     }
 
     public virtual void Show()
     {
+      Debug.Log($"{this.GetType()} SHOWN (GO ={gameObject.name})");
       gameObject.SetActive(true);
       //ToDo: Appear animation.
     }

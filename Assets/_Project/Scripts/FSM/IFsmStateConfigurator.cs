@@ -1,5 +1,8 @@
-public interface IFsmStateConfigurator
+namespace FSM
 {
-  void SetId(string id);
-  void LinkFsmState(FSM state);
+  public interface IFsmStateConfigurator
+  {
+    void SetId(string id);
+    void LinkFsmState(FSM state);
+  }
 }

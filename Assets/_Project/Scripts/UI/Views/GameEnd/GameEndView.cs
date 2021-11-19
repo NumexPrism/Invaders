@@ -1,9 +1,9 @@
-﻿using DependencyInjection.UI;
+﻿using Installers.UI.UiPanel;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI
+namespace UI.Views.GameEnd
 {
   [RequireComponent(typeof(GameEndViewMonoInstaller))]
   internal class GameEndView: BaseUIView

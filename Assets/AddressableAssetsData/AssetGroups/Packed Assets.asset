@@ -21,10 +21,6 @@ MonoBehaviour:
     m_Address: Assets/_Project/Prefabs/UI/Projectile.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 41b236ff98a955840a67c3fcecc138bb
-    m_Address: Assets/_Project/Prefabs/UI/Loading.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 99c08d1585393174bb53983f88d09437
     m_Address: Assets/_Project/Prefabs/UI/MainMenu.prefab
     m_ReadOnly: 0

@@ -1,4 +1,6 @@
-﻿namespace UI
+﻿using FSM;
+
+namespace UI
 {
   class UiState:BaseFsmState
   {
