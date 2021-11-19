@@ -1,7 +1,7 @@
 ﻿using UI;
 using UI.Views.Game;
 using UI.Views.GameEnd;
-using UI.Views.Leaderboard;
+using UI.Views.LeaderBoard;
 using UI.Views.Loading;
 using UI.Views.MainMenu;
 using UnityEngine;

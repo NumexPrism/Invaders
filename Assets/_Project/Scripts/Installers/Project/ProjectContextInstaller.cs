@@ -1,4 +1,5 @@
 ﻿using AssetManagement;
+using LeaderBoard;
 using Mechanics.GameRules;
 using UnityEngine;
 using Zenject;
@@ -11,6 +12,8 @@ namespace Installers.Project
     public override void InstallBindings()
     {
       Container.Bind<IGameSession>().To<NullGameSession>().AsCached();
+      Container.Bind<ILeaderBoardAdapter>().To<PlayerPrefsLeaderBoard>().AsCached();
+      Container.Bind<IPlayerProfileAdapter>().To<StubPlayerProfile>().AsCached();
       Container.Bind<InvadersSceneManager>().AsSingle();
     }
   }

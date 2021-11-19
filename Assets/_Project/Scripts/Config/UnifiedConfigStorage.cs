@@ -12,5 +12,6 @@ namespace Config
     public GameFieldConfig Field;
     public ProjectileConfig PlayerProjectileConfig;
     public ProjectileConfig EnemyProjectileConfig;
+    public EnemyWaveConfig enemiesWave;
   }
 }

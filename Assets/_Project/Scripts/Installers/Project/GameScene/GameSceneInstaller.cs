@@ -34,6 +34,9 @@ namespace Installers.Project.GameScene
         .FromInstance(ConfigStorage.PlayerShip);
       Container.Bind<IGameFieldConfig>()
         .FromInstance(ConfigStorage.Field);
+      Container.Bind<IEnemyWaveConfig>()
+        .FromInstance(ConfigStorage.enemiesWave);
+
       Container.Bind<IProjectileConfig>()
         .WithId(Party.Player)
         .FromInstance(ConfigStorage.PlayerProjectileConfig);

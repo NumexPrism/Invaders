@@ -1,21 +1,30 @@
-﻿using Installers.UI.UiPanel;
+﻿using Installers.Project.UI.UiPanel;
+using LeaderBoard;
+using UI.Widgets;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-namespace UI.Views.Leaderboard
+namespace UI.Views.LeaderBoard
 {
   [RequireComponent(typeof(LeaderBoardViewMonoInstaller))]
   internal class LeaderBoardView: BaseUIView
   {
-    //Yagni principle at work: I can add ButtonId, if the view changes to have 2 or more buttons
+    [Inject] private Button _backButton;//Yagni principle at work: I could have added ButtonId, if since the view only has one button, i will not.
+    [Inject] private Image _spinner;
+    [Inject] private ILeaderBoardAdapter _leaderBoard;
+    [Inject] private ScoreWidget.Factory _widgetFactory;
 
-    [Inject] private Button _backButton;
-
-    private void OnEnable()
+    private async void OnEnable()
     {
       _backButton.onClick.AddListener(BackButtonClicked);
-      //ToDo: Load leaderboard and spawn the score prefabs
+      _spinner.gameObject.SetActive(true);
+      var leadersData = await _leaderBoard.LoadScoresOrdered();
+      _spinner.gameObject.SetActive(false);
+      foreach (var datum in leadersData)
+      {
+        _widgetFactory.Create(datum);
+      }
     }
 
     private void OnDisable()

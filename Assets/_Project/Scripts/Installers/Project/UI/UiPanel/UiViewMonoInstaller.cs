@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Zenject;
 
-namespace Installers.UI.UiPanel
+namespace Installers.Project.UI.UiPanel
 {
   abstract class UiViewMonoInstaller<TDerived> : MonoInstaller<TDerived> where TDerived : MonoInstaller<TDerived>
   {

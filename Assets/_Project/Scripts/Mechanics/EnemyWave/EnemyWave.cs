@@ -13,28 +13,35 @@ namespace Mechanics.Enemy
   {
     private readonly SimpleEnemy.Factory _enemyFactory;
     private readonly Projectile.Factory _projectileFactory;
-    private readonly IGameFieldConfig _field;
-    [Inject(Id = Party.Enemy)] private IProjectileConfig _projectileConfig;
+    private readonly IGameFieldConfig _fieldConfig;
+    private readonly IProjectileConfig _projectileConfig;
+    private readonly IEnemyWaveConfig _enemyConfig;
 
-    [Inject]public EnemyWave(
+    [Inject]
+    public EnemyWave(
       SimpleEnemy.Factory enemyFactory,
       Projectile.Factory projectileFactory,
-      IGameFieldConfig field)
+      IGameFieldConfig fieldConfig,
+      [Inject(Id = Party.Enemy)]IProjectileConfig projectileConfig,
+      IEnemyWaveConfig enemyConfig)
     {
       _enemyFactory = enemyFactory;
       _projectileFactory = projectileFactory;
-      _field = field;
+      _fieldConfig = fieldConfig;
+      _projectileConfig = projectileConfig;
+      _enemyConfig = enemyConfig;
       _alivePawns = new List<SimpleEnemy>();
     }
 
-    private IProjectile activeProjectile;
+    private IProjectile _activeProjectile;
 
     private int RemainingEnemies => _alivePawns.Count;
     private readonly List<SimpleEnemy> _alivePawns;
 
     public int WaveNumber { get; private set; }
-    public bool AllowedToShoot => activeProjectile == null;
+    public bool AllowedToShoot => _activeProjectile == null;
 
+    public event Action<int> PawnKilled;
     public event Action<int> WaveSpawnCompleted;
     public event Action<int> WaveSpawnStarted;
     public event Action WaveCleared;
@@ -57,20 +64,21 @@ namespace Mechanics.Enemy
         randomPawn.transform.position, //ToDo: add getter to shooter, to spawn projectiles not from ppivot
         randomPawn.Party,
         _projectileConfig);
-      activeProjectile = _projectileFactory.Create(parameters);
-      activeProjectile.DeSpawning += OnProjectileDeSpawning;
+      _activeProjectile = _projectileFactory.Create(parameters);
+      _activeProjectile.DeSpawning += OnProjectileDeSpawning;
     }
 
     private void OnProjectileDeSpawning(IProjectile deadProjectile)
     {
       deadProjectile.DeSpawning -= OnProjectileDeSpawning;
-      activeProjectile = null;
+      _activeProjectile = null;
     }
 
     public void OnPawnDestroyed(SimpleEnemy destroyedEnemy)
     {
       _alivePawns.Remove(destroyedEnemy);
       destroyedEnemy.Destroyed -= OnPawnDestroyed;
+      PawnKilled?.Invoke(destroyedEnemy.PointsRewarded);
       if (RemainingEnemies == 0)
       {
         WaveCleared?.Invoke();
@@ -85,23 +93,21 @@ namespace Mechanics.Enemy
       }
       _alivePawns.Clear();
 
-      //ToDo: ExtractParameters
-      int w = 4;
-      int h = 4;
+      int topCell = _fieldConfig.Rows - _enemyConfig.OffsetFromTop;
 
-      int topCell = _field.Rows - 4;
+      Vector3 jumpInOffset = new Vector3(0, 0, _fieldConfig.Height);
 
-      Vector3 jumpInOffset = new Vector3(0, 0, _field.Height);
+      float jumpDuration = _enemyConfig.SpawnTime;
 
-      float jumpDuration = 1.0f;
-
-      for (int i = 0; i < w; i++)
+      for (int i = 0; i < _enemyConfig.EnemiesInRow; i++)
       {
-        for (int j = 0; j < h; j+=2)
+        var rowStep = _enemyConfig.RowsSpacing+1;
+        for (int j = 0; j < _enemyConfig.Rows*(_enemyConfig.RowsSpacing+1); j += rowStep)
         {
           var spawnParameters = new EnemySpawnParameters
           {
-            position = _field.Cell(i, topCell - j) + jumpInOffset
+            Position = _fieldConfig.Cell(i, topCell - j) + jumpInOffset,
+            PointsReward = _enemyConfig.ScorePerEnemy
           };
           var enemy = _enemyFactory.Create(spawnParameters);
           enemy.Destroyed += OnPawnDestroyed;

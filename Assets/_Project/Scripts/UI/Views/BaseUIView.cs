@@ -13,14 +13,14 @@ namespace UI.Views
     public virtual void Hide()
     {
       //ToDo:disappearAnimation
-      Debug.Log($"{this.GetType()} HIDEDN (GO ={gameObject.name})");
       gameObject.SetActive(false);
+      enabled = false;
     }
 
     public virtual void Show()
     {
-      Debug.Log($"{this.GetType()} SHOWN (GO ={gameObject.name})");
       gameObject.SetActive(true);
+      enabled = true;
       //ToDo: Appear animation.
     }
   }

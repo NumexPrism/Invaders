@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AssetManagement;
 using Cysharp.Threading.Tasks;
+using LeaderBoard;
 using Mechanics.Enemy;
 using Mechanics.Field;
 using Mechanics.Player;
@@ -14,6 +15,7 @@ namespace Mechanics.GameRules
 {
   partial class GameController : MonoBehaviour, IGameSession
   {
+    [Inject] private ILeaderBoardAdapter _leaderboard;
     [Inject] private InvadersSceneManager _sceneManager;
     [Inject] private EnemyWave _wave;
     [Inject] private IGameFieldConfig _field;
@@ -38,6 +40,7 @@ namespace Mechanics.GameRules
       JumpToGameUiInEditor();
 
       _wave.WaveCleared += OnWaveCleared;
+      _wave.PawnKilled += AddPoints;
       _metronome = new Metronome();
 
       _metronome.Tick += OnEveryTick;
@@ -49,6 +52,11 @@ namespace Mechanics.GameRules
 
       //ToDo: move away from start, wait input instead
       SpawnWave();
+    }
+
+    private void AddPoints(int bounty)
+    {
+      _playerScore.Set(_playerScore+bounty);
     }
 
     private void OnGameStop()
@@ -77,6 +85,7 @@ namespace Mechanics.GameRules
     {
       _metronome.Stop();
       _uiFacade.ShowNextView();
+      _leaderboard.PublishScore(_playerScore);
     }
 
     private async UniTask SpawnWave()

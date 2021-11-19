@@ -1,4 +1,4 @@
-﻿using Installers.UI.UiPanel;
+﻿using Installers.Project.UI.UiPanel;
 using UnityEngine;
 
 namespace UI.Views.Loading

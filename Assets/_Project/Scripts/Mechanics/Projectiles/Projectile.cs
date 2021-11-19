@@ -13,14 +13,13 @@ namespace Mechanics.Projectiles
 
     [Inject] private IGameFieldConfig _gameField;
 
-    internal class Pool: MonoMemoryPool<ProjectileLaunchParameters, Projectile> {}
+    public class Pool: MonoMemoryPool<ProjectileLaunchParameters, Projectile> {}
     public class Factory:PlaceholderFactory<ProjectileLaunchParameters, Projectile>{}
 
     public event Action<IProjectile> DeSpawning;
 
     public void OnSpawned(ProjectileLaunchParameters projectileLaunchParameters, IMemoryPool pool)
     {
-      Debug.Log("Projectile.CONSTRUCT");
       _pool = pool;
       transform.position = projectileLaunchParameters.ShootPoint;
       transform.rotation = Quaternion.LookRotation(projectileLaunchParameters.Velocity);
@@ -36,6 +35,11 @@ namespace Mechanics.Projectiles
       _party = Party.None;
     }
 
+    public void Dispose()
+    {
+      _pool.Despawn(this);
+    }
+
     private void Update()
     {
       if (_gameField.IsOutsideBounds(transform.position))
@@ -46,14 +50,8 @@ namespace Mechanics.Projectiles
       transform.position += _velocity * Time.deltaTime;
     }
 
-    public void Dispose()
-    {
-      _pool.Despawn(this);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-      Debug.Log("HIT SMTHING");
       var canBeHit = other.GetComponent<IHitByProjectile>();
       if (canBeHit == null || canBeHit.Party == Party.None || canBeHit.Party == _party)
       {

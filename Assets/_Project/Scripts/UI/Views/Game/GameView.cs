@@ -1,6 +1,4 @@
-﻿using Installers.UI.UiPanel;
-using Mechanics;
-using Mechanics.Enemy;
+﻿using Installers.Project.UI.UiPanel;
 using Mechanics.GameRules;
 using TMPro;
 using UnityEngine;
@@ -12,6 +10,11 @@ namespace UI.Views.Game
   [RequireComponent(typeof(GameViewMonoInstaller))]
   internal class GameView: BaseUIView
   {
+    //it's not some global value, it's just a max value that can be displayed in UI
+    //so not moving to any configs or global constants.
+    private const int MaxScore = 999999;
+    private const int MaxWaves = 99;
+
     //rule of three at work: _backButton is just copied from the LeaderBoard View. If I have a third occurrence, I will introduce a base class, or move to composite
     [Inject] private Button _backButton;
     [Inject(Id = UiLabelId.Wave)] private TextMeshProUGUI _waveText;
@@ -40,12 +43,12 @@ namespace UI.Views.Game
 
     private void ShowWave(int number)
     {
-      _waveText.text = Mathf.Min(number, 99).ToString("D2");;
+      _waveText.text = Mathf.Min(number, MaxWaves).ToString("D2");;
     }
 
     private void ShowScore(int number)
     {
-      _scoreText.text = Mathf.Min(number, 99).ToString("D6");;
+      _scoreText.text = Mathf.Min(number, MaxScore).ToString("D6");;
     }
 
     private void ShowLives(int number)

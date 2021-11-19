@@ -12,7 +12,8 @@ namespace Mechanics.Enemy
 
     private IMemoryPool _pool;
     public Party Party => Party.Enemy;
-    private LinearMovement _currentMovement;
+    public int PointsRewarded { get; private set; }
+    private LinearMovementCommand _currentMovement;
 
     public event Action<SimpleEnemy> Destroyed;
 
@@ -24,7 +25,8 @@ namespace Mechanics.Enemy
 
     public void OnSpawned(EnemySpawnParameters spawnParameters, IMemoryPool pool)
     {
-      transform.position = spawnParameters.position;
+      transform.position = spawnParameters.Position;
+      PointsRewarded = spawnParameters.PointsReward;
       _pool = pool;
     }
 
@@ -32,6 +34,7 @@ namespace Mechanics.Enemy
     {
       _pool = null;
       transform.position = Vector3.zero;
+      PointsRewarded = 0;
     }
 
     public void Dispose()
@@ -68,7 +71,7 @@ namespace Mechanics.Enemy
       _currentMovement?.Cancel();
 
       //ToDo: Inject linearMovement
-      var movement = new LinearMovement(() => Time.time, duration, deltaMove);
+      var movement = new LinearMovementCommand(() => Time.time, duration, deltaMove);
       _currentMovement = movement;
 
       return UniTask.WaitUntil(() => movement.IsCompleted(), PlayerLoopTiming.LastUpdate);

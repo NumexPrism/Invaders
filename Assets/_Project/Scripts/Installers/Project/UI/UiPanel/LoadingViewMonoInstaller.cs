@@ -1,4 +1,4 @@
-﻿namespace Installers.UI.UiPanel
+﻿namespace Installers.Project.UI.UiPanel
 {
   class LoadingViewMonoInstaller : UiViewMonoInstaller<LoadingViewMonoInstaller>
   {

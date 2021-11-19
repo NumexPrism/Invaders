@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Threading;
 using UnityEngine;
 
 namespace Mechanics.Enemy
 {
-  class LinearMovement
+  class LinearMovementCommand
   {
+    //that class looks really similar to command pattern. To be a fullFledged pattern it only lacks "revert" functionality
+
     private readonly Func<float> CurrentTime;
     private readonly float _moveEndTime;
     private readonly float _duration;
@@ -16,14 +17,14 @@ namespace Mechanics.Enemy
     private float _prevTickValue;
     private bool wasCancelled;
 
-    public LinearMovement(Func<float> currentTime, float duration, Vector3 moveVector) : this(
+    public LinearMovementCommand(Func<float> currentTime, float duration, Vector3 moveVector) : this(
       currentTime,
       duration,
       moveVector,
       AnimationCurve.EaseInOut(0, 0, 1, 1)
     ){}
 
-    public LinearMovement(Func<float> currentTime, float duration, Vector3 moveVector, AnimationCurve normalizedEasing)
+    public LinearMovementCommand(Func<float> currentTime, float duration, Vector3 moveVector, AnimationCurve normalizedEasing)
     {
       wasCancelled = false;
       CurrentTime = currentTime;
@@ -37,7 +38,6 @@ namespace Mechanics.Enemy
 
     public void Cancel()
     {
-      //cancelationTokens would seen a good way, but they are basically exceptions, and work poorly with waitall, waitany
       wasCancelled = true;
     }
 

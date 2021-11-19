@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Installers.UI.UiPanel
+namespace Installers.Project.UI.UiPanel
 {
   class MainMenuViewMonoInstaller : UiViewMonoInstaller<LoadingViewMonoInstaller>
   {

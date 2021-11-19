@@ -4,6 +4,7 @@ namespace Mechanics.Enemy
 {
   internal struct EnemySpawnParameters
   {
-    public Vector3 position;
+    public Vector3 Position;
+    public int PointsReward;
   }
 }
