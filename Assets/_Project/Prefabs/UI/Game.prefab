@@ -2019,7 +2019,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e398c83c8044920844f57c1416ac9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waveText: {fileID: 4638024870974666314}
 --- !u!225 &7576198656141798177
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2064,6 +2063,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backButton: {fileID: 6240225586743870368}
   waveText: {fileID: 4638024870974666314}
+  livesText: {fileID: 406507226394490972}
+  scoreText: {fileID: 151388073727814871}
 --- !u!1 &9199860911144653856
 GameObject:
   m_ObjectHideFlags: 0

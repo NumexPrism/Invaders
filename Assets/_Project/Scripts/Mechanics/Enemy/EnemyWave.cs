@@ -1,49 +1,94 @@
 ﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Mechanics.Field;
+using Mechanics.Projectiles;
+using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 namespace Mechanics.Enemy
 {
   internal class EnemyWave
   {
     private readonly SimpleEnemy.Factory _enemyFactory;
+    private readonly Projectile.Factory _projectileFactory;
     private readonly IGameFieldConfig _field;
+    [Inject(Id = Party.Enemy)] private IProjectileConfig _projectileConfig;
 
-    [Inject]public EnemyWave(SimpleEnemy.Factory enemyFactory, IGameFieldConfig field)
+    [Inject]public EnemyWave(
+      SimpleEnemy.Factory enemyFactory,
+      Projectile.Factory projectileFactory,
+      IGameFieldConfig field)
     {
       _enemyFactory = enemyFactory;
+      _projectileFactory = projectileFactory;
       _field = field;
+      _aliveEnemies = new List<SimpleEnemy>();
     }
 
-    private int _remainingEnemies;
+    private IProjectile activeProjectile;
+
+    private int RemainingEnemies => _aliveEnemies.Count;
+    private readonly List<SimpleEnemy> _aliveEnemies;
 
     public int WaveNumber { get; private set; }
+    public bool AllowedToShoot => activeProjectile == null;
 
-    public event Action<int> WaveSpawned;
+    public event Action<int> WaveSpawnCompleted;
+    public event Action<int> WaveSpawnStarted;
     public event Action WaveCleared;
 
-    //it would be good to make it cached
+    //ToDo: it would be good to make it cached
     public void Restart()
     {
       WaveNumber = 0;
     }
 
-    public void NotifyKilled()
+    public void Shoot()
     {
-      _remainingEnemies--;
-      if (_remainingEnemies == 0)
+      var randomPawn = _aliveEnemies[Random.Range(0, _aliveEnemies.Count - 1)];//ToDo: make abstract selector
+      var parameters = new ProjectileLaunchParameters(
+        randomPawn.transform.position, //ToDo: add getter to shooter, to spawn projectiles not from ppivot
+        randomPawn.Party,
+        _projectileConfig);
+      activeProjectile = _projectileFactory.Create(parameters);
+      activeProjectile.DeSpawning += OnProjectileDeSpawning;
+    }
+
+    private void OnProjectileDeSpawning(IProjectile deadProjectile)
+    {
+      deadProjectile.DeSpawning -= OnProjectileDeSpawning;
+      activeProjectile = null;
+    }
+
+    public void OnPawnDestroyed(SimpleEnemy destroyedEnemy)
+    {
+      _aliveEnemies.Remove(destroyedEnemy);
+      destroyedEnemy.Destroyed -= OnPawnDestroyed;
+      if (RemainingEnemies == 0)
       {
         WaveCleared?.Invoke();
       }
     }
 
-    public void Spawn()
+    public async UniTask Spawn()
     {
+      foreach (var enemy in _aliveEnemies)
+      {
+        enemy.Dispose();
+      }
+      _aliveEnemies.Clear();
+
       //ToDo: ExtractParameters
-      int w = 12;
-      int h = 8;
+      int w = 4;
+      int h = 4;
 
       int topCell = _field.Rows - 4;
+
+      Vector3 jumpInOffset = new Vector3(0, 0, _field.Height);
+
+      float jumpDuration = 1.0f;
 
       for (int i = 0; i < w; i++)
       {
@@ -51,15 +96,31 @@ namespace Mechanics.Enemy
         {
           var spawnParameters = new EnemySpawnParameters
           {
-            position = _field.Cell(i, topCell - j)
+            position = _field.Cell(i, topCell - j) + jumpInOffset
           };
-          _enemyFactory.Create(spawnParameters);
-          _remainingEnemies++;
+          var enemy = _enemyFactory.Create(spawnParameters);
+          enemy.Destroyed += OnPawnDestroyed;
+          _aliveEnemies.Add(enemy);
         }
       }
 
       WaveNumber++;
-      WaveSpawned?.Invoke(WaveNumber);
+      WaveSpawnStarted?.Invoke(WaveNumber);
+      await MoveAll(-jumpInOffset, jumpDuration);
+      WaveSpawnCompleted?.Invoke(WaveNumber);
+    }
+
+    public async UniTask MoveAll(Vector3 moveVector, float moveTime)
+    {
+      await UniTask.WhenAll(ShipsMove(moveVector, moveTime));
+    }
+
+    private IEnumerable<UniTask> ShipsMove(Vector3 deltaMove, float time)
+    {
+      foreach (var enemy in _aliveEnemies)
+      {
+        yield return enemy.Move(deltaMove, time);
+      }
     }
   }
 }

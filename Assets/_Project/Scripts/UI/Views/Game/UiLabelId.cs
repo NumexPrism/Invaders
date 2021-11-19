@@ -2,6 +2,8 @@
 {
   internal enum UiLabelId
   {
-    Wave
+    Wave,
+    Lives,
+    Score
   }
 }

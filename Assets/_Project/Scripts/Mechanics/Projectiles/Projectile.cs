@@ -7,8 +7,8 @@ namespace Mechanics.Projectiles
 {
   class Projectile : MonoBehaviour, IProjectile, IPoolable<ProjectileLaunchParameters, IMemoryPool>, IDisposable
   {
-    private Vector3 velocity;
-    private Party party;
+    private Vector3 _velocity;
+    private Party _party;
     IMemoryPool _pool;
 
     [Inject] private IGameFieldConfig _gameField;
@@ -16,21 +16,24 @@ namespace Mechanics.Projectiles
     internal class Pool: MonoMemoryPool<ProjectileLaunchParameters, Projectile> {}
     public class Factory:PlaceholderFactory<ProjectileLaunchParameters, Projectile>{}
 
+    public event Action<IProjectile> DeSpawning;
+
     public void OnSpawned(ProjectileLaunchParameters projectileLaunchParameters, IMemoryPool pool)
     {
       Debug.Log("Projectile.CONSTRUCT");
       _pool = pool;
       transform.position = projectileLaunchParameters.ShootPoint;
       transform.rotation = Quaternion.LookRotation(projectileLaunchParameters.Velocity);
-      velocity = projectileLaunchParameters.Velocity;
-      party = projectileLaunchParameters.Party;
+      _velocity = projectileLaunchParameters.Velocity;
+      _party = projectileLaunchParameters.Party;
     }
 
     public void OnDespawned()
     {
+      DeSpawning?.Invoke(this);
       _pool = null;
-      velocity = Vector3.zero;
-      party = Party.None;
+      _velocity = Vector3.zero;
+      _party = Party.None;
     }
 
     private void Update()
@@ -40,7 +43,7 @@ namespace Mechanics.Projectiles
         Dispose();
         return;
       }
-      transform.position += velocity * Time.deltaTime;
+      transform.position += _velocity * Time.deltaTime;
     }
 
     public void Dispose()
@@ -52,11 +55,11 @@ namespace Mechanics.Projectiles
     {
       Debug.Log("HIT SMTHING");
       var canBeHit = other.GetComponent<IHitByProjectile>();
-      if (canBeHit == null || canBeHit.Party == Party.None || canBeHit.Party == party)
+      if (canBeHit == null || canBeHit.Party == Party.None || canBeHit.Party == _party)
       {
         return;
       }
-      canBeHit.ReceiveDamage();
+      canBeHit.RespondToHit();
       Dispose();
     }
   }

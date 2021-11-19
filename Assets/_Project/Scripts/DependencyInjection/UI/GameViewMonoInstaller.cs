@@ -9,12 +9,16 @@ namespace DependencyInjection.UI
   {
     [SerializeField] private Button backButton;
     [SerializeField] private TextMeshProUGUI waveText;
+    [SerializeField] private TextMeshProUGUI livesText;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     public override void InstallBindings()
     {
       base.InstallBindings();
       Container.BindInstance(backButton);
       Container.BindInstance(waveText).WithId(UiLabelId.Wave);
+      Container.BindInstance(livesText).WithId(UiLabelId.Lives);
+      Container.BindInstance(scoreText).WithId(UiLabelId.Score);
     }
   }
 }

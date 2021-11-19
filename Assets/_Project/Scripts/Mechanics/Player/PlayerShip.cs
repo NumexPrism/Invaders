@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Input;
 using Mechanics.Field;
-using Mechanics.GameField;
 using Mechanics.Projectiles;
 using UnityEngine;
 using Zenject;
@@ -19,14 +18,21 @@ namespace Mechanics.Player
     [Inject] private IGameFieldConfig _gameField;
     [Inject(Id = Party.Player)] private IProjectileConfig _projectileConfig;
 
+    public event Action Damaged;
+
+    public bool IsInvincible { get; set; } = false;
+
     private float _speed;
     private Task _shootTimeoutTask;
 
     public Party Party => Party.Player;
 
-    public void ReceiveDamage()
+    public void RespondToHit()
     {
-      Debug.Log("Lives reduced");
+      if (!IsInvincible)
+      {
+        Damaged?.Invoke();
+      }
     }
 
     public bool IsAllowedToShoot => _shootTimeoutTask == null || _shootTimeoutTask.IsCompleted;

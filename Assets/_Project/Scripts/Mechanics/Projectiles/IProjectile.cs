@@ -1,7 +1,9 @@
-﻿namespace Mechanics.Projectiles
+﻿using System;
+
+namespace Mechanics.Projectiles
 {
   interface IProjectile
   {
-
+    event Action<IProjectile> DeSpawning;
   }
 }

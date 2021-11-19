@@ -21,6 +21,6 @@ MonoBehaviour:
     rows: 24
     columns: 16
   PlayerProjectileConfig:
-    speed: 20
+    speed: 40
   EnemyProjectileConfig:
-    speed: 2
+    speed: 30

@@ -3,6 +3,6 @@
   public interface IHitByProjectile
   {
     Party Party { get; }
-    void ReceiveDamage();
+    void RespondToHit();
   }
 }

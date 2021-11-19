@@ -1,9 +1,8 @@
 ﻿using System;
-using Mechanics.Field;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Mechanics.GameField
+namespace Mechanics.Field
 {
   [Serializable]
   public class GameFieldConfig : IGameFieldConfig
