@@ -65,7 +65,16 @@ namespace UI
         }
       }
 
-      fsm.StateChanged += ChangeUiPanel;
+      fsm.StateChanged += OnUiFsmChanged;
+    }
+
+    private void OnUiFsmChanged(string previous, string current)
+    {
+      ChangeUiPanel(previous,current);
+      if (previous == UiFsmStateId.Game && current == UiFsmStateId.MainMenu)
+      {
+        GameStopped?.Invoke();
+      }
     }
 
     private void ChangeUiPanel(string previous, string current)
@@ -103,6 +112,8 @@ namespace UI
     {
       return fsm.ProcessSignal(UiFsmSignalId.LeaderBoard);
     }
+
+    public event Action GameStopped;
 
 #if UNITY_EDITOR
     public void ForceSwitchToGameUi()

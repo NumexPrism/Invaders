@@ -45,8 +45,16 @@ namespace Mechanics.GameRules
 
       _player.Damaged += OnPlayerDamaged;
 
+      _uiFacade.GameStopped += OnGameStop;
+
       //ToDo: move away from start, wait input instead
       SpawnWave();
+    }
+
+    private void OnGameStop()
+    {
+      _metronome.Stop(); //in case we run only the game scene
+      _sceneManager.UnloadGameScene();
     }
 
     private async void OnPlayerDamaged()

@@ -5,6 +5,7 @@ using Mechanics.Field;
 using Mechanics.GameRules;
 using Mechanics.Player;
 using Mechanics.Projectiles;
+using UI;
 using UnityEngine;
 using Zenject;
 
@@ -19,6 +20,8 @@ namespace Installers.Project.GameScene
     [SerializeField] private SimpleEnemy EnemyPrefab;
 
     [SerializeField] private GameController gameController;
+
+    [SerializeField] [Header("Editor for editor")]private UiFacade UiPrefab;
 
     public override void InstallBindings()
     {
@@ -57,6 +60,8 @@ namespace Installers.Project.GameScene
       {
         parentContainer.BindInstance(gameController);
         parentContainer.Rebind<IGameSession>().FromInstance(gameController);
+
+        InstallUIForDebugIfNeeded(parentContainer);
       }
     }
 
@@ -68,6 +73,16 @@ namespace Installers.Project.GameScene
         parentContainer.Rebind<IGameSession>().To<NullGameSession>().AsCached();
         parentContainer.Unbind<GameController>();
       }
+    }
+
+    private void InstallUIForDebugIfNeeded(DiContainer parentContainer)
+    {
+#if UNITY_EDITOR
+      if (!parentContainer.HasBinding<UiFacade>())
+      {
+        parentContainer.BindInterfacesAndSelfTo<UiFacade>().FromComponentInNewPrefab(UiPrefab).AsSingle();
+      }
+#endif
     }
   }
 }

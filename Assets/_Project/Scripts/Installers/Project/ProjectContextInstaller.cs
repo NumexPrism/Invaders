@@ -10,7 +10,7 @@ namespace Installers.Project
   {
     public override void InstallBindings()
     {
-      Container.Bind<IGameSession>().To<NullGameSession>().AsSingle();
+      Container.Bind<IGameSession>().To<NullGameSession>().AsCached();
       Container.Bind<InvadersSceneManager>().AsSingle();
     }
   }

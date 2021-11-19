@@ -6,13 +6,10 @@ namespace UI.Views.Loading
   [RequireComponent(typeof(LoadingViewMonoInstaller))]
   internal class LoadingView: BaseUIView
   {
-    private void OnEnable()
+    public override void Hide()
     {
-      Debug.Log("ENABLED!!!!");
-    }
-    private void OnDisable()
-    {
-      Debug.Log("DESABLED !!!!");
+      //we never show loading screen after we close it. Why don't we free some memory then.
+      Destroy(gameObject);
     }
   }
 }

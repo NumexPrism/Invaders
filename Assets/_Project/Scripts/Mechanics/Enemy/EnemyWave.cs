@@ -24,13 +24,13 @@ namespace Mechanics.Enemy
       _enemyFactory = enemyFactory;
       _projectileFactory = projectileFactory;
       _field = field;
-      _aliveEnemies = new List<SimpleEnemy>();
+      _alivePawns = new List<SimpleEnemy>();
     }
 
     private IProjectile activeProjectile;
 
-    private int RemainingEnemies => _aliveEnemies.Count;
-    private readonly List<SimpleEnemy> _aliveEnemies;
+    private int RemainingEnemies => _alivePawns.Count;
+    private readonly List<SimpleEnemy> _alivePawns;
 
     public int WaveNumber { get; private set; }
     public bool AllowedToShoot => activeProjectile == null;
@@ -47,7 +47,12 @@ namespace Mechanics.Enemy
 
     public void Shoot()
     {
-      var randomPawn = _aliveEnemies[Random.Range(0, _aliveEnemies.Count - 1)];//ToDo: make abstract selector
+      if (_alivePawns.Count == 0)
+      {
+        return;
+      }
+
+      var randomPawn = _alivePawns[Random.Range(0, _alivePawns.Count - 1)];//ToDo: make abstract selector
       var parameters = new ProjectileLaunchParameters(
         randomPawn.transform.position, //ToDo: add getter to shooter, to spawn projectiles not from ppivot
         randomPawn.Party,
@@ -64,7 +69,7 @@ namespace Mechanics.Enemy
 
     public void OnPawnDestroyed(SimpleEnemy destroyedEnemy)
     {
-      _aliveEnemies.Remove(destroyedEnemy);
+      _alivePawns.Remove(destroyedEnemy);
       destroyedEnemy.Destroyed -= OnPawnDestroyed;
       if (RemainingEnemies == 0)
       {
@@ -74,11 +79,11 @@ namespace Mechanics.Enemy
 
     public async UniTask Spawn()
     {
-      foreach (var enemy in _aliveEnemies)
+      foreach (var enemy in _alivePawns)
       {
         enemy.Dispose();
       }
-      _aliveEnemies.Clear();
+      _alivePawns.Clear();
 
       //ToDo: ExtractParameters
       int w = 4;
@@ -100,7 +105,7 @@ namespace Mechanics.Enemy
           };
           var enemy = _enemyFactory.Create(spawnParameters);
           enemy.Destroyed += OnPawnDestroyed;
-          _aliveEnemies.Add(enemy);
+          _alivePawns.Add(enemy);
         }
       }
 
@@ -117,7 +122,7 @@ namespace Mechanics.Enemy
 
     private IEnumerable<UniTask> ShipsMove(Vector3 deltaMove, float time)
     {
-      foreach (var enemy in _aliveEnemies)
+      foreach (var enemy in _alivePawns)
       {
         yield return enemy.Move(deltaMove, time);
       }

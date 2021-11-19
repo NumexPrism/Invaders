@@ -39,7 +39,7 @@ namespace UI.Views.MainMenu
 
     private async void StartButtonClicked()
     {
-      await _scenes.LoadGameScene();
+      await _scenes.LoadSingleGameScene();
       UiFacade.ShowNextView();
     }
 

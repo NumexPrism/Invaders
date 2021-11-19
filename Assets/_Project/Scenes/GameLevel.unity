@@ -386,7 +386,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 465119353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1745d97c736a92b438819e4d83bd0332, type: 3}
+  m_Script: {fileID: 11500000, guid: d68b9bdb863d4fb48d9994cc96ab0d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   config: {fileID: 11400000, guid: 36a69c4223da8dd458faf5580bb127e1, type: 2}
@@ -426,6 +426,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 3879698918097754407, guid: fc85572e808b8ea46a7c70cf42cd5910, type: 3}
   EnemyPrefab: {fileID: 5891472387886744540, guid: 40d1b91cd78e9624aab67ddee905205d, type: 3}
   gameController: {fileID: 465119354}
+  UiPrefab: {fileID: 4664989686636472159, guid: f94c0bd99a3876b4fbf740583c6837e4, type: 3}
 --- !u!114 &672675555
 MonoBehaviour:
   m_ObjectHideFlags: 0
