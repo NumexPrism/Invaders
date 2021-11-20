@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
 using Zenject;
 
 namespace UI.Views
@@ -10,18 +11,23 @@ namespace UI.Views
     [Inject] protected CanvasGroup CanvasGroup;
     [Inject] protected IUiFacade UiFacade;
 
-    public virtual void Hide()
+    public void Awake()
     {
-      //ToDo:disappearAnimation
       gameObject.SetActive(false);
-      enabled = false;
     }
 
-    public virtual void Show()
+    //overrides are basically a tool to break Liskov Principle. It's to easy to forget to call base.foo
+    //templateMethod would be good here. But as you know, I'm short on time.
+    public virtual UniTask Show()
     {
       gameObject.SetActive(true);
-      enabled = true;
-      //ToDo: Appear animation.
+      return UniTask.CompletedTask;//can be changed to showing Animation
+    }
+
+    public virtual UniTask Hide()
+    {
+      return UniTask.CompletedTask//can be changed to hiding animation
+        .ContinueWith(()=>gameObject.SetActive(false));
     }
   }
 }

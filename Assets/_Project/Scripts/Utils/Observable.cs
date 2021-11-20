@@ -5,21 +5,22 @@ namespace Utils
 {
   class Observable<T>: IObservable<T> 
   {
-    private T _value;
+    public T Value { get; private set; }
+
     public event Action<T> Changed;
 
-    public static implicit operator T(Observable<T> d) => d._value;
+    public static implicit operator T(Observable<T> d) => d.Value;
 
     public Observable(T value)
     {
-      this._value = value;
+      this.Value = value;
       Changed = null;
     }
 
     public void Set(T value)
     {
-      _value = value;
-      Changed?.Invoke(_value);
+      Value = value;
+      Changed?.Invoke(Value);
     }
 
     public void Observe([NotNull] Action<T> onChanged)
@@ -27,7 +28,7 @@ namespace Utils
       if(onChanged == null)
         throw new ArgumentNullException(nameof(onChanged));
       Changed += onChanged;
-      onChanged(_value);
+      onChanged(Value);
     }
 
     public void StopObserving(Action<T> onChanged)

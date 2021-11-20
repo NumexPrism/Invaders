@@ -1,8 +1,10 @@
-﻿namespace UI
+﻿using Cysharp.Threading.Tasks;
+
+namespace UI
 {
   internal interface IUiView
   {
-    void Hide();
-    void Show();
+    UniTask Show();
+    UniTask Hide();
   }
 }

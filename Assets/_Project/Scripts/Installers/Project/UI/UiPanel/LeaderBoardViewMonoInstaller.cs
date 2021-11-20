@@ -26,7 +26,8 @@ namespace Installers.Project.UI.UiPanel
       
       Container.BindFactory<LeaderBoardEntry, ScoreWidget, ScoreWidget.Factory>()
         .FromMonoPoolableMemoryPool(x => x.WithInitialSize(6)
-          .FromNewComponentOnNewPrefab(widgetPrefab).UnderTransform(widgetRoot.transform));
+          .FromComponentInNewPrefab(widgetPrefab)
+          .UnderTransform(widgetRoot.transform));
     }
   }
 }

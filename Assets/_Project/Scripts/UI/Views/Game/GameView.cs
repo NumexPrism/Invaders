@@ -1,4 +1,5 @@
-﻿using Installers.Project.UI.UiPanel;
+﻿using Cysharp.Threading.Tasks;
+using Installers.Project.UI.UiPanel;
 using Mechanics.GameRules;
 using TMPro;
 using UnityEngine;
@@ -15,30 +16,33 @@ namespace UI.Views.Game
     private const int MaxScore = 999999;
     private const int MaxWaves = 99;
 
-    //rule of three at work: _backButton is just copied from the LeaderBoard View. If I have a third occurrence, I will introduce a base class, or move to composite
     [Inject] private Button _backButton;
     [Inject(Id = UiLabelId.Wave)] private TextMeshProUGUI _waveText;
     [Inject(Id = UiLabelId.Lives)] private TextMeshProUGUI _livesText;
     [Inject(Id = UiLabelId.Score)] private TextMeshProUGUI _scoreText;
 
-    [Inject] private DiContainer container;
+    [Inject] private DiContainer _container;
 
     private IGameSession _subscribedGameSession;
 
-    private void OnEnable()
+    public override async UniTask Show()
     {
+      await base.Show();
       //GameController is injected dynamically when GameScene opens
-      //when
-      SubscribeToGameSession(container.Resolve<IGameSession>());
-    }
-
-    private void SubscribeToGameSession(IGameSession gameSession)
-    {
-      this._subscribedGameSession = gameSession;
+      this._subscribedGameSession = _container.Resolve<IGameSession>();
       _backButton.onClick.AddListener(BackButtonClicked);
       _subscribedGameSession.WaveCount.Observe(ShowWave);
       _subscribedGameSession.PlayerLives.Observe(ShowLives);
       _subscribedGameSession.PlayerScore.Observe(ShowScore);
+    }
+
+    public override async UniTask Hide()
+    {
+      await base.Show();
+      _backButton.onClick.RemoveListener(BackButtonClicked);
+      _subscribedGameSession.WaveCount.StopObserving(ShowWave);
+      _subscribedGameSession.PlayerLives.StopObserving(ShowLives);
+      _subscribedGameSession.PlayerScore.StopObserving(ShowScore);
     }
 
     private void ShowWave(int number)
@@ -55,14 +59,6 @@ namespace UI.Views.Game
     {
       char Symbol = 'M';
       _livesText.text = new string(Symbol, number);
-    }
-
-    private void OnDisable()
-    {
-      _backButton.onClick.RemoveListener(BackButtonClicked);
-      _subscribedGameSession.WaveCount.StopObserving(ShowWave);
-      _subscribedGameSession.PlayerLives.StopObserving(ShowLives);
-      _subscribedGameSession.PlayerScore.StopObserving(ShowScore);
     }
 
     private void BackButtonClicked()

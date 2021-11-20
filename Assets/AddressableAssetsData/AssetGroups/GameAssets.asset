@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: GameAssets
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
+  m_GroupName: GameAssets
   m_Data:
     m_SerializedData: []
-  m_GUID: 3a3a739118db2d84996ff8afe5074712
+  m_GUID: a4c14e3c44f82834191f78772b4f8121
   m_SerializeEntries:
   - m_GUID: a3f734a7fea9c794ba8f576f5cd27a97
     m_Address: Assets/_Project/Scenes/GameLevel.unity
@@ -25,5 +25,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: d8bfc74861f13ab49966651fcef45554, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: d6e69ce08c2839d4d82b3b2262d7731b, type: 2}
-    - {fileID: 11400000, guid: 072884188ac1143448fa9fbdf8d55aa2, type: 2}
+    - {fileID: 11400000, guid: 378305e83c3100c418dfcb1aebef1859, type: 2}
+    - {fileID: 11400000, guid: ecd4cf445a0fea442a0f212fd27e9474, type: 2}

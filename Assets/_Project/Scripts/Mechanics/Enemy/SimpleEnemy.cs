@@ -1,5 +1,7 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Mechanics.Field;
+using Mechanics.GameRules;
 using Mechanics.Projectiles;
 using UnityEngine;
 using Zenject;
@@ -10,9 +12,13 @@ namespace Mechanics.Enemy
   {
     internal class Factory : PlaceholderFactory<EnemySpawnParameters, SimpleEnemy> {}
 
+    [Inject] private IGameFieldConfig _fieldConfig;
+    [Inject] private GameController _GameSession;
+
     private IMemoryPool _pool;
     public Party Party => Party.Enemy;
     public int PointsRewarded { get; private set; }
+
     private LinearMovementCommand _currentMovement;
 
     public event Action<SimpleEnemy> Destroyed;
@@ -51,6 +57,10 @@ namespace Mechanics.Enemy
       if (IsMoving)
       {
         transform.position += _currentMovement.CalculateMoveStep();
+      }
+      if (transform.position.z < _fieldConfig.Bottom())
+      {
+        _GameSession.GameOver();
       }
     }
 

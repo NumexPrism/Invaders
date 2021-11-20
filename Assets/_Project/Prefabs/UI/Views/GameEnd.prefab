@@ -933,6 +933,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextButton: {fileID: 9146767415343590088}
+  waveText: {fileID: 6622575434731733960}
+  scoreText: {fileID: 8748929223200516634}
 --- !u!225 &5849460277213413176
 CanvasGroup:
   m_ObjectHideFlags: 0

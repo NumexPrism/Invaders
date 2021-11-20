@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Mechanics.Enemy;
 using Mechanics.Field;
 using Mechanics.Projectiles;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
-namespace Mechanics.Enemy
+namespace Mechanics.EnemyWave
 {
   internal class EnemyWave
   {
@@ -60,6 +61,14 @@ namespace Mechanics.Enemy
       }
 
       var randomPawn = _alivePawns[Random.Range(0, _alivePawns.Count - 1)];//ToDo: make abstract selector
+      if (!randomPawn)
+      {
+        //pawns were already destroyed by unloading scene. The object will be destroyed later by GC. 
+        //the easy fix for that is to make the class be a monoBeh.
+        //but I wanted to showcase installing something non-monobeh and transient too much. Now I have to deal with the consequences
+        return;
+      }
+
       var parameters = new ProjectileLaunchParameters(
         randomPawn.transform.position, //ToDo: add getter to shooter, to spawn projectiles not from ppivot
         randomPawn.Party,

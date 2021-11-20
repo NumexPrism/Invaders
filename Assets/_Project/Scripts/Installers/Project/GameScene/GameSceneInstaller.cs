@@ -1,6 +1,7 @@
 ﻿using Config;
 using Input;
 using Mechanics.Enemy;
+using Mechanics.EnemyWave;
 using Mechanics.Field;
 using Mechanics.GameRules;
 using Mechanics.Player;
@@ -56,6 +57,10 @@ namespace Installers.Project.GameScene
           .FromComponentInNewPrefab(EnemyPrefab)
           .UnderTransformGroup("Enemies"));
 
+      Container.Bind<Renderer>()
+        .FromComponentOn(Ship.gameObject)
+        .WhenInjectedInto<PlayerShip>();
+
       //I feel like I'm missing something out here, but i'm not sure what exactly.
       //There definitely should be a "clever way" to bind UI prefab context and game scene context
       //but I struggled with that for too much time by now. Will just use parent container, which is ProjectContext and bind it there.
@@ -70,10 +75,13 @@ namespace Installers.Project.GameScene
 
     private void OnDestroy()
     {
-      //When Scene Unloads we reset binding to null
+      //When Scene Unloads we reset binding to proxy
       foreach (var parentContainer in Container.ParentContainers)
       {
-        parentContainer.Rebind<IGameSession>().To<NullGameSession>().AsCached();
+        var session = parentContainer.Resolve<IGameSession>();
+        var proxy = parentContainer.Resolve<GameSessionProxy>();
+        proxy.CopyFrom(session);
+        parentContainer.Rebind<IGameSession>().FromInstance(proxy);
         parentContainer.Unbind<GameController>();
       }
     }

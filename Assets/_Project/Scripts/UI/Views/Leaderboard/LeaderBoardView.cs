@@ -1,4 +1,5 @@
-﻿using Installers.Project.UI.UiPanel;
+﻿using Cysharp.Threading.Tasks;
+using Installers.Project.UI.UiPanel;
 using LeaderBoard;
 using UI.Widgets;
 using UnityEngine;
@@ -15,8 +16,9 @@ namespace UI.Views.LeaderBoard
     [Inject] private ILeaderBoardAdapter _leaderBoard;
     [Inject] private ScoreWidget.Factory _widgetFactory;
 
-    private async void OnEnable()
+    public override async UniTask Show()
     {
+      await base.Show();
       _backButton.onClick.AddListener(BackButtonClicked);
       _spinner.gameObject.SetActive(true);
       var leadersData = await _leaderBoard.LoadScoresOrdered();
@@ -27,8 +29,9 @@ namespace UI.Views.LeaderBoard
       }
     }
 
-    private void OnDisable()
+    public override async UniTask Hide()
     {
+      await base.Hide();
       _backButton.onClick.RemoveListener(BackButtonClicked);
     }
 

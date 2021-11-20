@@ -1,4 +1,5 @@
 ﻿using AssetManagement;
+using Cysharp.Threading.Tasks;
 using Installers.Project.UI.UiPanel;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,15 +24,17 @@ namespace UI.Views.MainMenu
 
     [Inject] private InvadersSceneManager _scenes;
 
-    private void OnEnable()
+    public override async UniTask Show()
     {
+      await base.Show();
       _startButton.onClick.AddListener(StartButtonClicked);
       _leaderBoardButton.onClick.AddListener(LeaderBoardButtonClicked);
       _exitButton.onClick.AddListener(ExitButtonClicked);
     }
 
-    private void OnDisable()
+    public override async UniTask Hide()
     {
+      await base.Hide();
       _startButton.onClick.RemoveListener(StartButtonClicked);
       _leaderBoardButton.onClick.RemoveListener(LeaderBoardButtonClicked);
       _exitButton.onClick.RemoveListener(ExitButtonClicked);

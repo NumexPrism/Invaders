@@ -53,15 +53,13 @@ namespace UI
       fsm.Start();
 
       var currentActiveView = ViewById(fsm.CurrentStateId);
+
+      //all views are hidden by default
       foreach (var view in AllViews)
       {
         if (currentActiveView == view)
         {
           view.Show();
-        }
-        else
-        {
-          view.Hide();
         }
       }
 
