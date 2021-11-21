@@ -18,9 +18,7 @@ namespace Loading
     {
       Debug.Log("started");
       await DownloadResources();
-
       _ui.ShowNextView();
-      Debug.Log("scene loaded and started");
     }
 
     private async UniTask DownloadResources()

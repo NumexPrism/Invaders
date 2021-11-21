@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using Zenject;
-
-namespace Mechanics.Projectiles
+﻿namespace Mechanics.Projectiles
 {
   public enum Party
   {

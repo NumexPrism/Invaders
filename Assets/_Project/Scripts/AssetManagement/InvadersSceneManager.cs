@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace AssetManagement
@@ -12,6 +10,10 @@ namespace AssetManagement
 
     public async UniTask LoadSingleGameScene()
     {
+      //this snippet allows us to unload an old GameScene in editor, if we only work with game scene
+      //because we should always have at least one loaded scene.
+      //the other approach would be to use an empty scene during unloading.
+
       List<Scene> outdatedScenes = new List<Scene>();
       for (int i = 0; i < SceneManager.sceneCount; i++)
       {
@@ -21,12 +23,10 @@ namespace AssetManagement
           outdatedScenes.Add(outdatedScene);
         }
       }
+
       await SceneManager.LoadSceneAsync(Game, LoadSceneMode.Additive);
-      foreach (var scene in outdatedScenes)
-      {
-        //no need to await unloading. 
-        SceneManager.UnloadSceneAsync(scene);
-      }
+
+      await UniTask.WhenAll(outdatedScenes.Select(s => SceneManager.UnloadSceneAsync(s).ToUniTask()));
     }
 
     public async UniTask UnloadGameScene()

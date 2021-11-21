@@ -4,48 +4,58 @@ using UnityEngine;
 
 namespace FSM
 {
-  public class FSM
+  public class Fsm<TStateId, TSignal>
   {
-    protected FSM() {}
+    //I'm not particularly a fan of FSMs, because the topic is really vague, and everyone means something different when says "StateMachine"
+    //FSM from the algorithmic point of view is just a graph, where nodes are states and links are "transitions"
+    //each transition is labeled with signal, FSM receives a signal, and if current active state has a link with that label
+    //it just switches the active state to where the link points to. that's it. Not really useful on it's own
+    //
+    //I've seen quite a lot of variations - with async reversible transitions, with parametrized transitions, with nested state machines, with tickable states, with blackboard 
+    
+    //state machines usually excel at situations where there is a set of signals, but the system should process each signal differently, depending on it's state
+    //a good example is animation. There is a signal "jump" and depending on current state "idle" or "run" the character will play different anims.
+    
+    protected Fsm() {}
 
-    private Dictionary<string, IFsmState>_states
-      = new Dictionary<string, IFsmState>();
+    private readonly HashSet<TStateId> _states = new HashSet<TStateId>();
+ 
+    private readonly Dictionary<TStateId, Dictionary<TSignal, TStateId>> _transitions =
+      new Dictionary<TStateId, Dictionary<TSignal, TStateId>>();
 
-    private Dictionary<string, Dictionary<string, string>> _transitions =
-      new Dictionary<string, Dictionary<string, string>>();
+    public TStateId CurrentStateId { get; private set; }
 
-    public string CurrentStateId { get; private set; }
-
-    public static IFsmBuilder Build()
+    public static IFsmBuilder<TStateId, TSignal> Build()
     {
       return new Builder();
     }
 
-    private class Builder : IFsmBuilder
+    //on the topic of nested classes. They have their pros and cons, and quite controversial to use.
+    //in some cases, with factories and builders and classes who should be hidden from the "outer world" they are OK.
+    //it's functionally similar to c++ friend classes - a way to allow one class to access privates of another.
+    private class Builder : IFsmBuilder<TStateId, TSignal>
     {
-      private FSM _sm;
+      private readonly Fsm<TStateId, TSignal> _sm;
 
       public Builder()
       {
-        _sm = new FSM();
+        _sm = new Fsm<TStateId, TSignal> ();
       }
 
-      public IFsmBuilder AddState<TFsmState>(string id, TFsmState state) where TFsmState : IFsmState, IFsmStateConfigurator
+      public IFsmBuilder<TStateId, TSignal> AddState(TStateId stateId)
       {
-        _sm._states[id] = state;
-        state.LinkFsmState(_sm); 
-        state.SetId(id);
+        _sm._states.Add(stateId);
         return this;
       }
 
-      public IFsmBuilder AddTransition(string source, string signal, string target)
+      public IFsmBuilder<TStateId, TSignal> AddTransition(TStateId source, TSignal signal, TStateId target)
       {
-        if (!_sm._states.ContainsKey(source))
+        if (!_sm._states.Contains(source))
           throw new ArgumentException($"source is {source} but has no state assigned. please use AddState({source}, ...)");
 
         if (!_sm._transitions.ContainsKey(source))
         {
-          _sm._transitions[source] = new Dictionary<string, string>();
+          _sm._transitions[source] = new Dictionary<TSignal, TStateId>();
         }
 
         _sm._transitions[source][signal] = target;
@@ -53,35 +63,39 @@ namespace FSM
         return this;
       }
 
-      public FSM SetEntryState(string entry)
+      public Fsm<TStateId, TSignal>  StartInState(TStateId entry)
       {
         _sm.CurrentStateId = entry;
         return _sm;
       }
     }
 
-    public void Start()
-    {
-      var state = _states[CurrentStateId];
-      state.OnEnter();
-    }
+    private readonly Queue<TSignal> _signals = new Queue<TSignal>(1);
 
-    private readonly Queue<string> signals = new Queue<string>(1);
+    /// <summary>
+    /// Called before changes are applied
+    /// </summary>
+    public event Action<TStateId, TStateId> StateChanging;
 
-    public bool ProcessSignal(string signal)
+    /// <summary>
+    /// Called after changes are applied
+    /// </summary>
+    public event Action<TStateId, TStateId> StateChanged;
+
+    public bool ProcessSignal(TSignal signal)
     {
-      if (signals.Count != 0)
+      if (_signals.Count != 0)
       {
         Debug.LogError("recursive state change is not supported");
         return false;
       }
 
-      signals.Enqueue(signal);
+      _signals.Enqueue(signal);
 
       if (!_transitions.ContainsKey(CurrentStateId))
       {
         Debug.Log($"State {CurrentStateId} has no rule for signal {signal}. Nothing happens");
-        signals.Dequeue();
+        _signals.Dequeue();
         return false;
       }
 
@@ -91,59 +105,30 @@ namespace FSM
         var nextStateId = _transitions[CurrentStateId][signal];
 
         StateChanging?.Invoke(CurrentStateId, nextStateId);
-
-        try
-        {
-          var state = _states[CurrentStateId];
-          state.OnExit();
-        }
-        catch (Exception e)
-        {
-          Debug.LogException(e);
-        }
-
         CurrentStateId = nextStateId;
-        var nextState = _states[nextStateId];
-        nextState.OnEnter();
-
-        StateChanged?.Invoke(previousStateId, nextStateId);
-      }
-      catch (Exception e)
-      {
-        throw;
+        StateChanged?.Invoke(previousStateId, CurrentStateId);
       }
       finally
       {
-        signals.Dequeue();
+        _signals.Dequeue();
       }
       return true;
     }
 
     //For debugging purposes
 #if UNITY_EDITOR
-    public void ForceChangeState(string id)
+    public void ForceChangeState(TStateId newStateId)
     {
       //one cool way to approach it would be to find the shortest path in the state graph
       //and traverse the way, so it would be valid from the SM perspective.
 
-      //Since it's a test task, i'will just hop to the requested state, and mark the method as editor only
-
+      //Since it's a test task, i will just hop to the requested state, and mark the method as editor only
       var previousStateId = CurrentStateId;
-      StateChanging?.Invoke(CurrentStateId, id);
-      CurrentStateId = id;
-      StateChanged?.Invoke(previousStateId, id);
+      StateChanging?.Invoke(CurrentStateId, newStateId);
+      CurrentStateId = newStateId;
+      StateChanged?.Invoke(previousStateId, newStateId);
     }
 #endif
 
-
-    /// <summary>
-    /// Called before changes are applied
-    /// </summary>
-    public event Action<string, string> StateChanging;
-
-    /// <summary>
-    /// Called after changes are applied
-    /// </summary>
-    public event Action<string,string> StateChanged;
   }
 }

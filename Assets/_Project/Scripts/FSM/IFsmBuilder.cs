@@ -1,9 +1,9 @@
 namespace FSM
 {
-  public interface IFsmBuilder
+  public interface IFsmBuilder<TState, TSignal>
   {
-    IFsmBuilder AddState<TFsmState>(string id, TFsmState state) where TFsmState : IFsmState, IFsmStateConfigurator;
-    IFsmBuilder AddTransition(string source, string signal, string target);
-    FSM SetEntryState(string entry);
+    IFsmBuilder<TState, TSignal> AddState(TState id);
+    IFsmBuilder<TState, TSignal> AddTransition(TState source, TSignal signal, TState target);
+    Fsm<TState,TSignal> StartInState(TState entry);
   }
 }

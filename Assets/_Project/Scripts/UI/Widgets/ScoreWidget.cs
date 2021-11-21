@@ -13,7 +13,10 @@ namespace UI.Widgets
 
     //Look how easy it's to setup dependencies in a widget
     //such a bliss =)
-    [SerializeField] private TextMeshProUGUI name;
+    //setting up with Zenject manually is just achieving the same with extra work
+    //setting up automatically is bad for performance, because it breaks down to GetComponent<>
+
+    [SerializeField] private TextMeshProUGUI nameWidget;
     [SerializeField] private TextMeshProUGUI score;
     private IMemoryPool _pool;
 
@@ -30,7 +33,7 @@ namespace UI.Widgets
         return;
       }
       //ToDo: inject them fields
-      name.text = entry.name;
+      nameWidget.text = entry.name;
       score.text = Mathf.Clamp(entry.score, 0, 999999).ToString("D6");
       _pool = pool;
     }

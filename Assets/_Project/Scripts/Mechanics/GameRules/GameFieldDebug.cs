@@ -21,7 +21,6 @@ namespace Mechanics.GameRules
     {
       if (InputSystem.GetDevice<Keyboard>().pKey.wasPressedThisFrame)
       {
-        Debug.Log("KILLED");
         gameController.DebugGameOver();
       }
     }

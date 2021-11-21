@@ -12,7 +12,7 @@ namespace UI
 {
   class UiFacade : MonoBehaviour, IUiFacade, IUiDebug
   {
-    private FSM.FSM fsm;
+    private FSM.Fsm<string, string> _fsm;
 
     [Inject] private LoadingView _loadingView;
     [Inject] private MainMenuView _mainMenu;
@@ -34,12 +34,12 @@ namespace UI
 
     public void Start()
     {
-      fsm = FSM.FSM.Build()
-        .AddState(UiFsmStateId.Loading,     new UiState())
-        .AddState(UiFsmStateId.MainMenu,    new UiState())
-        .AddState(UiFsmStateId.Game,        new UiState())
-        .AddState(UiFsmStateId.GameOver,    new UiState())
-        .AddState(UiFsmStateId.Leaderboard, new UiState())
+      _fsm = FSM.Fsm<string,string>.Build()
+        .AddState(UiFsmStateId.Loading)
+        .AddState(UiFsmStateId.MainMenu)
+        .AddState(UiFsmStateId.Game)
+        .AddState(UiFsmStateId.GameOver)
+        .AddState(UiFsmStateId.Leaderboard)
 
         .AddTransition(UiFsmStateId.Loading,     UiFsmSignalId.Next,        UiFsmStateId.MainMenu)
         .AddTransition(UiFsmStateId.MainMenu,    UiFsmSignalId.Next,        UiFsmStateId.Game)
@@ -49,10 +49,9 @@ namespace UI
         .AddTransition(UiFsmStateId.Game,        UiFsmSignalId.Next,        UiFsmStateId.GameOver)
         .AddTransition(UiFsmStateId.GameOver,    UiFsmSignalId.Next,        UiFsmStateId.MainMenu)
 
-        .SetEntryState(UiFsmStateId.Loading);
-      fsm.Start();
+        .StartInState(UiFsmStateId.Loading);
 
-      var currentActiveView = ViewById(fsm.CurrentStateId);
+      var currentActiveView = ViewById(_fsm.CurrentStateId);
 
       //all views are hidden by default
       foreach (var view in AllViews)
@@ -63,7 +62,7 @@ namespace UI
         }
       }
 
-      fsm.StateChanged += OnUiFsmChanged;
+      _fsm.StateChanged += OnUiFsmChanged;
     }
 
     private void OnUiFsmChanged(string previous, string current)
@@ -98,17 +97,17 @@ namespace UI
 
     public bool ShowNextView()
     {
-      return fsm.ProcessSignal(UiFsmSignalId.Next);
+      return _fsm.ProcessSignal(UiFsmSignalId.Next);
     }
 
     public bool ShowPreviousView()
     {
-      return fsm.ProcessSignal(UiFsmSignalId.Back);
+      return _fsm.ProcessSignal(UiFsmSignalId.Back);
     }
 
     public bool ShowLeaderBoard()
     {
-      return fsm.ProcessSignal(UiFsmSignalId.LeaderBoard);
+      return _fsm.ProcessSignal(UiFsmSignalId.LeaderBoard);
     }
 
     public event Action GameStopped;
@@ -116,7 +115,7 @@ namespace UI
 #if UNITY_EDITOR
     public void ForceSwitchToGameUi()
     {
-      fsm.ForceChangeState(UiFsmStateId.Game);
+      _fsm.ForceChangeState(UiFsmStateId.Game);
     }
 #endif
   }
