@@ -14,7 +14,7 @@ namespace LeaderBoard
     [Serializable]
     class EntryList
     {
-      //JsonUnility can't serialize lists. object wrapper does the trick
+      //JsonUtility can't serialize lists. object wrapper does the trick
       public List<LeaderBoardEntry> entries = new List<LeaderBoardEntry>();
     }
 

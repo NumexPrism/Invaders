@@ -14,14 +14,14 @@ namespace Mechanics.GameRules
 {
   partial class GameController : MonoBehaviour, IGameSession
   {
-    [Inject] private ILeaderBoardAdapter _leaderboard;
+    [Inject] private ILeaderBoardAdapter _leaderBoard;
     [Inject] private InvadersSceneManager _sceneManager;
     [Inject] private EnemyWave.EnemyWave _wave;
     [Inject] private IGameFieldConfig _field;
     [Inject] private IPlayerShip _player;
     [Inject] private IUiFacade _uiFacade;
 
-    [Inject(Id = "Global")] private Metronome _GameMetronome;
+    [Inject(Id = "Global")] private Metronome _gameMetronome;
 
     private IEnumerator<Vector3> _movePattern;
 
@@ -35,23 +35,21 @@ namespace Mechanics.GameRules
 
     partial void JumpToGameUiInEditor();
 
-    private void Start()
+    private async void Start()
     {
       JumpToGameUiInEditor();
 
       _wave.WaveCleared += OnWaveCleared;
       _wave.PawnKilled += AddPoints;
-      _GameMetronome = new Metronome();//ToDo: Inject
+      _gameMetronome = new Metronome();//ToDo: Inject
 
-      _GameMetronome.Tick += OnEveryTick;
-      _GameMetronome.OnEvery(10).Tick += OnEveryTenthTick;
+      _gameMetronome.Tick += OnEveryTick;
+      _gameMetronome.OnEvery(10).Tick += OnEveryTenthTick;
 
       _player.Damaged += OnPlayerDamaged;
-
       _uiFacade.GameStopped += OnGameStop;
 
-      //ToDo: move away from start, wait input instead
-      SpawnWave();
+      await SpawnWave();
     }
 
     private void AddPoints(int bounty)
@@ -59,10 +57,10 @@ namespace Mechanics.GameRules
       _playerScore.Set(_playerScore+bounty);
     }
 
-    private void OnGameStop()
+    private async void OnGameStop()
     {
-      _GameMetronome.Stop(); //in case we run only the game scene
-      _sceneManager.UnloadGameScene();
+      _gameMetronome.Stop(); //in case we run only the game scene
+      await _sceneManager.UnloadGameScene();
     }
 
     private async void OnPlayerDamaged()
@@ -82,25 +80,23 @@ namespace Mechanics.GameRules
 
     public async void GameOver()
     {
-      _GameMetronome.Stop();
+      _gameMetronome.Stop();
       _uiFacade.ShowNextView();
-      await _leaderboard.PublishScore(_playerScore);
+      await _leaderBoard.PublishScore(_playerScore);
       await _sceneManager.UnloadGameScene();
     }
 
     private async UniTask SpawnWave()
     {
-      Debug.Log("ToDo: DisableInputs");
       await _wave.Spawn();
-      Debug.Log("ToDo: EnableInputs");
-      _GameMetronome.Bpm = 80;
+      _gameMetronome.Bpm = 80;
       _movePattern = MovePattern.GetEnumerator();
-      _GameMetronome.Start(0);
+      _gameMetronome.Start(0);
     }
 
     private async void OnWaveCleared()
     {
-      _GameMetronome.Stop();
+      _gameMetronome.Stop();
       _waveCount.Set(_waveCount+1);
       await SpawnWave();
     }
@@ -132,13 +128,13 @@ namespace Mechanics.GameRules
 
     private void OnEveryTenthTick()
     {
-      _GameMetronome.Bpm += 20;
+      _gameMetronome.Bpm += 20;
     }
 
     private async void OnEveryTick()
     {
       var MaxMoveTime = 0.25f;
-      var moveTime = Mathf.Clamp(_GameMetronome.IntervalSeconds - 0.1f, 0.0f, MaxMoveTime);
+      var moveTime = Mathf.Clamp(_gameMetronome.IntervalSeconds - 0.1f, 0.0f, MaxMoveTime);
       _movePattern.MoveNext();
       await _wave.MoveAll(_movePattern.Current, Mathf.Max(moveTime));
       if (_wave.AllowedToShoot)

@@ -16,12 +16,12 @@ namespace Mechanics.GameRules
       {
         _uiDebug.ForceSwitchToGameUi();
       }
-#endif
     }
 
     public void DebugGameOver()
     {
       GameOver();
     }
+#endif
   }
 }
