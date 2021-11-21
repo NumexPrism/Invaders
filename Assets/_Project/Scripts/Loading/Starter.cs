@@ -35,7 +35,7 @@ namespace Loading
       //
       // and if the memory footprint is a concern, it is possible to change direct resource dependencies to assetDependencies
       // and to unload them on the fly.
-      await UniTask.Delay(3000);
+      await UniTask.Delay(1000);
     }
   }
 }

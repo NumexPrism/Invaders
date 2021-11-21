@@ -14,7 +14,6 @@ namespace Installers.Project.GameScene
 {
   class GameSceneInstaller:MonoInstaller<GameSceneInstaller>
   {
-    [SerializeField] private PlayerActionsAdapter ActionAdapter;
     [SerializeField] private PlayerShip Ship;
     [SerializeField] private UnifiedConfigStorage ConfigStorage;
     [SerializeField] private Projectile ProjectilePrefab;
@@ -28,7 +27,6 @@ namespace Installers.Project.GameScene
     {
       Container.BindInstance(this).WithId("GameSceneContainer");
 
-      Container.BindInstance<IGameInput>(ActionAdapter);
       Container.BindInstance<IPlayerShip>(Ship);
 
       Container.Bind<IPlayerShipConfig>()
@@ -91,7 +89,8 @@ namespace Installers.Project.GameScene
 #if UNITY_EDITOR
       if (!parentContainer.HasBinding<UiFacade>())
       {
-        parentContainer.BindInterfacesAndSelfTo<UiFacade>().FromComponentInNewPrefab(UiPrefab).AsSingle();
+        parentContainer.Bind(typeof(IUiFacade), typeof(IUiDebug), typeof(UiFacade))
+          .FromComponentInNewPrefab(UiPrefab).AsSingle();
       }
 #endif
     }

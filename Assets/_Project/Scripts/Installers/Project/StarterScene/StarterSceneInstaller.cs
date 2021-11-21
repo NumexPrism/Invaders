@@ -1,4 +1,6 @@
-﻿using Loading;
+﻿using System;
+using Input;
+using Loading;
 using UI;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -19,7 +21,8 @@ namespace Installers.Project.StarterScene
       foreach (var parentContainer in Container.ParentContainers)
       {
         //I've put loading UI in the scene, to avoid screen flicks. Unity will load it fully before rendering any frames.
-        parentContainer.BindInterfacesAndSelfTo<UiFacade>().FromInstance(uiFacade);
+        parentContainer.Bind(typeof(UiFacade), typeof(IUiFacade), typeof(IUiDebug))
+          .FromInstance(uiFacade);
       }
     }
   }

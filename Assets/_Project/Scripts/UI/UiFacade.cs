@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Input;
 using UI.Views.Game;
 using UI.Views.GameEnd;
 using UI.Views.LeaderBoard;
@@ -10,9 +11,11 @@ using Zenject;
 
 namespace UI
 {
-  class UiFacade : MonoBehaviour, IUiFacade, IUiDebug
+  class UiFacade : MonoBehaviour, IUiFacade, IUiDebug, IGameInput
   {
     private FSM.Fsm<string, string> _fsm;
+
+    [Inject] private DiContainer _container;
 
     [Inject] private LoadingView _loadingView;
     [Inject] private MainMenuView _mainMenu;
@@ -34,6 +37,12 @@ namespace UI
 
     public void Start()
     {
+      RegisterInUiComposite();
+
+      _gameView.ShootCallback = () => { Shoot?.Invoke();};
+      _gameView.MoveStartCallback = dir => { MoveStarted?.Invoke(dir); };
+      _gameView.MoveEndCallback = () => { MoveStopped?.Invoke();};
+
       _fsm = FSM.Fsm<string,string>.Build()
         .AddState(UiFsmStateId.Loading)
         .AddState(UiFsmStateId.MainMenu)
@@ -63,6 +72,16 @@ namespace UI
       }
 
       _fsm.StateChanged += OnUiFsmChanged;
+    }
+
+    private void OnDestroy()
+    {
+      _container.Resolve<GameInputComposite>().Remove(this);
+    }
+
+    private void RegisterInUiComposite()
+    {
+      _container.Resolve<GameInputComposite>().Add(this);
     }
 
     private void OnUiFsmChanged(string previous, string current)
@@ -118,5 +137,9 @@ namespace UI
       _fsm.ForceChangeState(UiFsmStateId.Game);
     }
 #endif
+
+    public event Action<float> MoveStarted;
+    public event Action MoveStopped;
+    public event Action Shoot;
   }
 }

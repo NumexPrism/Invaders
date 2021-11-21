@@ -1,4 +1,5 @@
 ﻿using AssetManagement;
+using Input;
 using LeaderBoard;
 using Mechanics.GameRules;
 using Mechanics.Player;
@@ -20,6 +21,7 @@ namespace Installers.Project
       Container.Bind<Metronome>().AsTransient();
       Container.Bind<Metronome>().WithId("Global").AsCached();
       Container.Bind<Blinker>().AsTransient();
+      Container.BindInterfacesAndSelfTo<GameInputComposite>().AsSingle();
     }
   }
 }
