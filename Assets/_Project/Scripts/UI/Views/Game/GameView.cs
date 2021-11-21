@@ -68,8 +68,6 @@ namespace UI.Views.Game
       _moveRightButton.OnUp += _gameButtonsHandler.RightMoveReleased;
     }
 
-    
-
     public override async UniTask Hide()
     {
       await base.Hide();

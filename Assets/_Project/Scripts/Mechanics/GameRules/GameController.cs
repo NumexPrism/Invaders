@@ -40,19 +40,50 @@ namespace Mechanics.GameRules
       JumpToGameUiInEditor();
 
       _wave.WaveCleared += OnWaveCleared;
-      _wave.PawnKilled += AddPoints;
-      _gameMetronome = new Metronome();//ToDo: Inject
-
+      _wave.PawnKilled += AddScore;
       _gameMetronome.Tick += OnEveryTick;
       _gameMetronome.OnEvery(10).Tick += OnEveryTenthTick;
-
       _player.Damaged += OnPlayerDamaged;
       _uiFacade.GameStopped += OnGameStop;
 
       await SpawnWave();
     }
 
-    private void AddPoints(int bounty)
+    private void OnDestroy()
+    {
+      _wave.WaveCleared -= OnWaveCleared;
+      _wave.PawnKilled -= AddScore;
+      _gameMetronome.Tick -= OnEveryTick;
+      _gameMetronome.OnEvery(10).Tick -= OnEveryTenthTick;
+      _player.Damaged -= OnPlayerDamaged;
+      _uiFacade.GameStopped -= OnGameStop;
+    }
+
+    IEnumerable<Vector3> MovePattern
+    {
+      get
+      {
+        Vector3 right = new Vector3(_field.CellWidth(), 0, 0);
+        Vector3 down = new Vector3(0, 0, -_field.CellHeight());
+        Vector3 left = new Vector3(-_field.CellWidth(), 0, 0);
+
+        while (true)
+        {
+          yield return right;
+          yield return right;
+          yield return right;
+          yield return right;
+          yield return down;
+          yield return left;
+          yield return left;
+          yield return left;
+          yield return left;
+          yield return down;
+        }
+      }
+    }
+
+    private void AddScore(int bounty)
     {
       _playerScore.Set(_playerScore+bounty);
     }
@@ -102,29 +133,6 @@ namespace Mechanics.GameRules
     }
 
     //ToDo: parametrize
-    IEnumerable<Vector3> MovePattern
-    {
-      get
-      {
-        Vector3 right = new Vector3(_field.CellWidth(), 0, 0);
-        Vector3 down = new Vector3(0, 0, -_field.CellHeight());
-        Vector3 left = new Vector3(-_field.CellWidth(), 0, 0);
-
-        while (true)
-        {
-          yield return right;
-          yield return right;
-          yield return right;
-          yield return right;
-          yield return down;
-          yield return left;
-          yield return left;
-          yield return left;
-          yield return left;
-          yield return down;
-        }
-      }
-    }
 
     private void OnEveryTenthTick()
     {
